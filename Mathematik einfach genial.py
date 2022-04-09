@@ -1,3 +1,8 @@
+#p 4
+def dreieckszahl(x):
+    """Summe der ersten n natuerlichen Zahlen"""
+  return int(((x + 1) * x) / 2)
+
 # Gesucht ist die Anzahl der Arten eine natuerliche Zahl (x) als Summe aufeinanderfolgender natuerlicher Zahlen darstellen zu koennen
 # Der hoechste Summand kann groeßer als x/2 sein (eg: 1 + 2 = 3) Vermutlich nicht groeßer als math.ceil(x/2).
 # IMPROVE optimise speed
