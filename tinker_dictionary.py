@@ -15,5 +15,5 @@ for i, k in data.items():
     print(i)
     print("-" * 20)
     for j in k[0].items():
-        print(j[1] / 1000) # this actually prints the degree C
+        print(j[1] / 1000) # access a single temperature value
     print("-" * 20, "END", "-" * 20)
