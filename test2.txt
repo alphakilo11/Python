@@ -1,0 +1,7 @@
+{"temperatur": [
+{ "time_epoch": 1648713513.8183122, "temperature": 19437 },
+{ "time_epoch": 1648713515.5784135, "temperature": 19437 },
+{ "time_epoch": 1648713517.3383229, "temperature": 19437 },
+{ "time_epoch": 1648713519.0983386, "temperature": 19437 },
+{ "time_epoch": 1648713520.8582778, "temperature": 19437 }
+]}

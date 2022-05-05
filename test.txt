@@ -1,0 +1,13 @@
+{"temperatur": [
+{ "time_epoch": 1651743136.4208868, "temperature": 23750 },
+{ "time_epoch": 1651743138.1808693, "temperature": 23812 },
+{ "time_epoch": 1651743139.9408634, "temperature": 23812 },
+{ "time_epoch": 1651743141.7408555, "temperature": 23812 },
+{ "time_epoch": 1651743143.4608352, "temperature": 23812 },
+{ "time_epoch": 1651743145.2209165, "temperature": 23812 },
+{ "time_epoch": 1651743146.9808512, "temperature": 23812 },
+{ "time_epoch": 1651743148.7408407, "temperature": 23812 },
+{ "time_epoch": 1651743150.5008392, "temperature": 23812 },
+{ "time_epoch": 1651743152.2608726, "temperature": 23812 },
+{ "time_epoch": 1651743153.1409295, "temperature": 23812 }
+]}
