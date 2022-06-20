@@ -29,7 +29,7 @@ def distribute(number_to_distribute, divisor):
 start = time.time()
 
 if __name__ == '__main__':
-    parameter1 = (distribute(52500, 1))
+    parameter1 = (distribute(525000, mp.cpu_count()))
     pool = mp.Pool(mp.cpu_count())  
     pool.map(collatz, parameter1)
     pool.close()  
