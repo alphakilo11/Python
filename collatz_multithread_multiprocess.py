@@ -2,7 +2,7 @@ import multiprocess as mp
 import time  
 
 def collatz(params):
-  #threadnumber = params[0]
+  """Calculates the collatz numbers from params[0] to including params[1]"""
   start = params[0]
   end = params[1]
   for i in range(start, end):
@@ -11,9 +11,9 @@ def collatz(params):
               i = i / 2
           else:
               i = 3 * i + 1
- # print("Thread number", threadnumber, "done.") 
 
 def distribute(number_to_distribute, divisor):
+  """Creates a list of lists including start and end values (eg for distributed computing)"""
   step1 = []
   share = number_to_distribute / divisor
   for i in range(divisor):
