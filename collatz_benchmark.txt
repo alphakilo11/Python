@@ -1,2 +1,3 @@
 1 to 999999, best of three (seconds)
 "Intel Xeon Gold 6242R", 20.64189863204956
+"Google Colaboratory 21jun2022", 27.51702618598938
