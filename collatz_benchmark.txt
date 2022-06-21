@@ -1,6 +1,7 @@
 1 to 999999, best of three (seconds)
 "Intel Xeon Gold 6242R", 
-"Google Colaboratory 21jun2022", 
+"Google Colaboratory 21jun2022", 17.023325861000004
 "Intel Core i5-12600K", 5.651073600000018
-"MacBook Pro M1 2019", 
-"Raspberry Pi 4",
+"MacBook Pro M1 2019", 6.426112209002895
+"Raspberry Pi 4", 34.64286788499999
+
