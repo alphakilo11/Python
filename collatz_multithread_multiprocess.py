@@ -1,3 +1,5 @@
+# this will only use ca. 20% on MBP M1
+
 import multiprocess as mp  
 import time  
 
@@ -29,7 +31,7 @@ def distribute(number_to_distribute, divisor):
 start = time.time()
 
 if __name__ == '__main__':
-    parameter1 = (distribute(525000, mp.cpu_count()))
+    parameter1 = (distribute(5250000, mp.cpu_count()))
     pool = mp.Pool(mp.cpu_count())  
     pool.map(collatz, parameter1)
     pool.close()  
