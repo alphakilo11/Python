@@ -1,6 +1,6 @@
 #  sum the words of a string by word-length and visualize
-#BUG if the string starts with a word it is not counted.
-#BUG the last word of each sentence is not counted.
+#BUG if the string starts with a word it is not counted. (workaround: insert blank space at the beginning)
+#BUG a word with any character (eg ") in front or behind will not be counted.
 
 import re
 from matplotlib import pyplot as plt
