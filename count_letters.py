@@ -1,5 +1,4 @@
 # Count letters and visualize them
-#BUG only lowercase
 
 import re
 from matplotlib import pyplot as plt
