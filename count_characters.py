@@ -6,4 +6,6 @@ count = {}
 for i in text:
   count.setdefault(i, 0)
   count[i] = count[i] + 1
-count
+
+for i in sorted(count.keys()):
+  print("'", i, "': ", count[i], sep="", end=", ")
