@@ -28,21 +28,17 @@ def read():
 	
 def loop():
 	global temperaturelist
-	for i in range(1):
+	for i in range(5): #while True
 		if read() != None:
-			print ("{", f'"time_epoch": {time.time()}, "temperature":', read(), "},")
-#		time.sleep(300) # measure every 5 minutes
-
-def destroy():
-	pass
+			temperaturelist.append([int(time.time()), read()])
+		time.sleep(1) #300 measure every 5 minutes
 
 if __name__ == '__main__':
 	try:
 		temperaturelist = []
 		setup()
-		print('{"temperatur": [')
+		temperaturelist.append(["Epoch-Time", "Temperature * 1000"])
 		loop()
-		print ("{", f'"time_epoch": {int(time.time())}, "temperature":', read(), "}") #workaround to avoid the last comma
-		print("]}")
-	except KeyboardInterrupt:
-		destroy()
+	finally:
+		#safe to file?
+		pass
