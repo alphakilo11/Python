@@ -27,15 +27,26 @@ def read():
 	return temperature
 	
 def loop():
-	global temperaturelist
+	global temperaturelist, next_save_day
 	for i in range(5): #while True
 		if read() != None:
 			temperaturelist.append([int(time.time()), read()])
+		now = time.localtime(time.time())
+		if now[2] == next_save_day and now[3] >= 2: #triggers once a day after 2 o'clock 
+			filename = str(now[0] + now[1] + now[2] + "_temperatures.txt")
+			with open(filename, "w") as file:
+				file.write(str(temperaturelist))
+			temperaturelist = []
+			next_save_day = time.localtime(time.time() + 3600 * 24)[2]
+			print("Successfully saved to", filename, "Next save on", next_save_day,".")
+			del filename, now
+
 		time.sleep(1) #300 measure every 5 minutes
 
 if __name__ == '__main__':
 	try:
 		temperaturelist = []
+		next_save_day = time.gmtime(time.time() + 3600 * 24)[2]
 		setup()
 		temperaturelist.append(["Epoch-Time", "Temperature * 1000"])
 		loop()
