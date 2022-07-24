@@ -3,7 +3,6 @@
 #	Note:
 #	Save it as seconds since epoch and convert it when accessing it (makes the file unreadable manually but makes it more flexible and saves memory)
 #----------------------------------------------------------------
-#ENHANCE create an automatic backup at 2 in the morning to allow the programm to continue while I analyse the data
 import os
 import time
 
@@ -28,11 +27,11 @@ def read():
 	
 def loop():
 	global temperaturelist, next_save_day
-	for i in range(5): #while True
+	while True: #while True
 		if read() != None:
 			temperaturelist.append([int(time.time()), read()])
 		now = time.localtime(time.time())
-		if now[2] == next_save_day and now[3] >= 23: #remove 23 triggers once a day after 2 o'clock 
+		if now[2] == next_save_day and now[3] >= 2: #triggers once a day after 2 o'clock 
 			filename = str(now[0]) + str(now[1]) + str(now[2]) + "_temperatures.txt"
 			with open(filename, "w") as file:
 				file.write(str(temperaturelist))
@@ -41,16 +40,19 @@ def loop():
 			print("Successfully saved to", filename, "Next save on", next_save_day,".")
 			del filename, now
 
-		time.sleep(1) #300 measure every 5 minutes
+		time.sleep(300) # measure every 5 minutes
 
 if __name__ == '__main__':
 	try:
 		temperaturelist = []
-		next_save_day = time.gmtime(time.time() + 3600 * 24)[2] - 1 #remove -1
+		next_save_day = time.gmtime(time.time() + 3600 * 24)[2]
 		setup()
 		temperaturelist.append(["Epoch-Time", "Temperature * 1000"])
 		loop()
 	finally:
-		#safe to file?
-		print(temperaturelist)
-		pass
+		now = time.localtime(time.time())
+		filename = str(now[0]) + str(now[1]) + str(now[2]) + "_temperatures.txt"
+		with open(filename, "w") as file:
+			file.write(str(temperaturelist))
+		print("Successfully saved to", filename, ". Program terminated.")
+
