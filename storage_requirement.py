@@ -25,7 +25,6 @@ foo = "01000 1011 11110111110"
 print(f"* theoretischer Wert wenn man bitwise speichern könnte: {5 + 4 + 11} bit={(5 + 4 + 11) / 8} byte/Eintrag .\nDatenbank mit {'{:.2e}'.format(world_population)} Einträgen: {convert_size((5 + 4 + 11) * world_population / 8)}.\n(ab 2048 bräuchte man für das Jahre ein weiteres bit/Eintrag)")
 
 # Proof of concept für variante 3 byte/Eintrag.
-#ENHANCE show, that the initial number can be reproduced again
 test = b"\x08\x0b\x52" * 1024 * 1024 # Byteobject with 3 bytes (this safes ~20% storage compared to strings)
 with open("test9.txt", "wb") as file: # byte-write to file
   file.write(test)
@@ -37,3 +36,7 @@ foo = raggy.sub("", foo) # "x" entfernen, da es eine Umwandlung verhindert
 bar = bytes.fromhex(foo) * 1024
 with open("byte_test.txt", "wb") as file:
   file.write(bar)
+# read the file and reproduce the number
+with open("byte_test.txt", "rb") as file:
+  spam = file.read()
+int(bytearray(spam).hex()[:6], 16)
