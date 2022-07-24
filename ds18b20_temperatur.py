@@ -33,7 +33,7 @@ def loop():
 			temperaturelist.append([int(time.time()), read()])
 		now = time.localtime(time.time())
 		if now[2] == next_save_day and now[3] >= 23: #remove 23 triggers once a day after 2 o'clock 
-			filename = str(now[0] + now[1] + now[2] + "_temperatures.txt")
+			filename = str(now[0]) + str(now[1]) + str(now[2]) + "_temperatures.txt"
 			with open(filename, "w") as file:
 				file.write(str(temperaturelist))
 			temperaturelist = []
