@@ -18,22 +18,20 @@ def setup():
 def read():
 #	global ds18b20
 	location = '/sys/bus/w1/devices/' + ds18b20 + '/w1_slave'
-	tfile = open(location)
-	text = tfile.read()
-	tfile.close()
+	with  open(location) as tfile:
+		text = tfile.read()
 	secondline = text.split("\n")[1]
-	temperaturedata = secondline.split(" ")[9]
-	temperature = temperaturedata[2:]
-#	temperature = float(temperaturedata[2:])
+#	temperaturedata = secondline.split(" ")[9]
+#	temperature = temperaturedata[2:]
 #	temperature = temperature / 1000
-	return temperature
+	return text #temperature
 	
 def loop():
 	global temperaturelist
-	for i in range(400):
+	for i in range(1):
 		if read() != None:
 			print ("{", f'"time_epoch": {time.time()}, "temperature":', read(), "},")
-		time.sleep(300) # measure every 5 minutes
+#		time.sleep(300) # measure every 5 minutes
 
 def destroy():
 	pass
