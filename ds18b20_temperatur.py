@@ -3,7 +3,7 @@
 #	Note:
 #	Save it as seconds since epoch and convert it when accessing it (makes the file unreadable manually but makes it more flexible and saves memory)
 #----------------------------------------------------------------
-# BUG the last comma is wrong
+#ENHANCE create an automatic backup at 2 in the morning to allow the programm to continue while I analyse the data
 import os
 import time
 
@@ -23,25 +23,28 @@ def read():
 	tfile.close()
 	secondline = text.split("\n")[1]
 	temperaturedata = secondline.split(" ")[9]
-	temperature = float(temperaturedata[2:])
+	temperature = temperaturedata[2:]
 #	temperature = float(temperaturedata[2:])
 #	temperature = temperature / 1000
 	return temperature
 	
 def loop():
-	for i in range(10):
+	global temperaturelist
+	for i in range(400):
 		if read() != None:
-			print ("{", f'"time_epoch": {time.time()}, "temperature": %0.0f' % read(), "},")
+			print ("{", f'"time_epoch": {time.time()}, "temperature":', read(), "},")
+		time.sleep(300) # measure every 5 minutes
 
 def destroy():
 	pass
 
 if __name__ == '__main__':
 	try:
+		temperaturelist = []
 		setup()
 		print('{"temperatur": [')
 		loop()
-		print ("{", f'"time_epoch": {time.time()}, "temperature": %0.0f' % read(), "}") #workaround to avoid the last comma
+		print ("{", f'"time_epoch": {time.time()}, "temperature":', read(), "}") #workaround to avoid the last comma
 		print("]}")
 	except KeyboardInterrupt:
 		destroy()
