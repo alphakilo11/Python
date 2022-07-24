@@ -6,6 +6,8 @@
 import os
 import time
 
+progress_update = True
+time_between_measurements = 300 # s
 ds18b20 = ''
 
 def setup():
@@ -29,7 +31,10 @@ def loop():
 	global temperaturelist, next_save_day
 	while True: #while True
 		if read() != None:
-			temperaturelist.append([int(time.time()), read()])
+			step = [int(time.time()), read()]
+			temperaturelist.append(step)
+			if progress_update:
+				print(step, "next in", time_between_measurements, "s.")
 		now = time.localtime(time.time())
 		if now[2] == next_save_day and now[3] >= 2: #triggers once a day after 2 o'clock 
 			filename = str(now[0]) + str(now[1]) + str(now[2]) + "_temperatures.txt"
@@ -40,7 +45,7 @@ def loop():
 			print("Successfully saved to", filename, "Next save on", next_save_day,".")
 			del filename, now
 
-		time.sleep(300) # measure every 5 minutes
+		time.sleep(time_between_measurements) 
 
 if __name__ == '__main__':
 	try:
