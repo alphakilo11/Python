@@ -30,7 +30,7 @@ test = b"\x08\x0b\x52" * 1024 * 1024 # Byteobject with 3 bytes (this safes ~20% 
 with open("test9.txt", "wb") as file: # byte-write to file
   file.write(test)
 
-foo = hex(int(2022 - 31) * 365.2425 ) # geburtsdatum des medianen Menschen. Dieses Verfahren ist ungenau daher nicht brauchbar.
+foo = hex(int((2022 - 31) * 365.2425)) # geburtsdatum des medianen Menschen. Dieses Verfahren ist ungenau daher nicht brauchbar.
 import re
 raggy = re.compile(r"x")
 foo = raggy.sub("", foo) # "x" entfernen, da es eine Umwandlung verhindert
