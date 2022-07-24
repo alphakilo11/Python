@@ -21,10 +21,10 @@ def read():
 	with  open(location) as tfile:
 		text = tfile.read()
 	secondline = text.split("\n")[1]
-#	temperaturedata = secondline.split(" ")[9]
-#	temperature = temperaturedata[2:]
-#	temperature = temperature / 1000
-	return text #temperature
+	temperaturedata = secondline.split(" ")[9]
+	temperature = temperaturedata[2:]
+#	temperature = temperature / 1000 # 1000? this seems rather strange. I would expect a base 2 value.
+	return temperature
 	
 def loop():
 	global temperaturelist
@@ -42,7 +42,7 @@ if __name__ == '__main__':
 		setup()
 		print('{"temperatur": [')
 		loop()
-		print ("{", f'"time_epoch": {time.time()}, "temperature":', read(), "}") #workaround to avoid the last comma
+		print ("{", f'"time_epoch": {int(time.time())}, "temperature":', read(), "}") #workaround to avoid the last comma
 		print("]}")
 	except KeyboardInterrupt:
 		destroy()
