@@ -32,7 +32,7 @@ def loop():
 		if read() != None:
 			temperaturelist.append([int(time.time()), read()])
 		now = time.localtime(time.time())
-		if now[2] == next_save_day and now[3] >= 2: #triggers once a day after 2 o'clock 
+		if now[2] == next_save_day and now[3] >= 23: #remove 23 triggers once a day after 2 o'clock 
 			filename = str(now[0] + now[1] + now[2] + "_temperatures.txt")
 			with open(filename, "w") as file:
 				file.write(str(temperaturelist))
@@ -46,7 +46,7 @@ def loop():
 if __name__ == '__main__':
 	try:
 		temperaturelist = []
-		next_save_day = time.gmtime(time.time() + 3600 * 24)[2]
+		next_save_day = time.gmtime(time.time() + 3600 * 24)[2] - 1 #remove -1
 		setup()
 		temperaturelist.append(["Epoch-Time", "Temperature * 1000"])
 		loop()
