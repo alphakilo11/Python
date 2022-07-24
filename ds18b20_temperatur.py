@@ -41,4 +41,5 @@ if __name__ == '__main__':
 		loop()
 	finally:
 		#safe to file?
+		print(temperaturelist)
 		pass
