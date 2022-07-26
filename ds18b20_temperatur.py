@@ -21,7 +21,7 @@ def read():
 	temperaturedata = secondline.split(" ")[9]
 	temperature = temperaturedata[2:]
 #	temperature = temperature / 1000 # 1000? this seems rather strange. I would expect a base 2 value.
-	return temperature
+	return int(temperature)
 
 if __name__ == '__main__':
 	try:
