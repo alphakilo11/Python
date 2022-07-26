@@ -45,7 +45,7 @@ if __name__ == '__main__':
 				print("Could not read update.py - execution continues")
 			# read temperature
 			if read() != None:
-				step = [int(time.time()), read()]
+				step = [int(time.time()), read()] # by int-casting the time resolution is reduced to 1 s
 				temperaturelist.append(step)
 				if progress_update:
 					print(step, "next in", time_between_measurements, "s.")
