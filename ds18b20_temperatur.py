@@ -11,7 +11,6 @@ time_between_measurements = 300 # s
 ds18b20 = ''
 
 def read():
-#	global ds18b20
 	location = '/sys/bus/w1/devices/' + ds18b20 + '/w1_slave'
 	with  open(location) as tfile:
 		text = tfile.read()
