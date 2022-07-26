@@ -52,7 +52,7 @@ if __name__ == '__main__':
 			# store data as scheduled
 			now = time.localtime(time.time())
 			if store_now or (now[2] == next_save_day and now[3] >= 2): #triggers once a day after 2 o'clock 
-				filename = str(now[0]) + str(now[1]) + str(now[2] + str(now[3] + str(now[4] + str(now[5]) + "_temperatures.txt"
+				filename = str(now[0]) + str(now[1]) + str(now[2]) + str(now[3]) + str(now[4]) + str(now[5]) + "_temperatures.txt"
 				#strip temperaturelist
 				delete_list = [[" ", ""], ["],", ";"], ["[", ""], ["]", ""]]
 				temperaturelist = str(temperaturelist)
