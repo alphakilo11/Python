@@ -16,3 +16,24 @@ with open("AK_test_20220720_1.txt", "w") as file:
 print(timer() - start)
 del foo, start
 np.set_printoptions(threshold=None)
+
+# isinstance performance
+from timeit import default_timer as timer
+import random
+
+liste_der_antworten = []
+or_times =[]
+instance_times = []
+for i in range(100):
+  for i in range(10000):
+    liste_der_antworten.append(random.choice([5, (3,5)]))
+
+  start = timer()
+  for i in liste_der_antworten:
+    type(i) == list or type(i) == tuple
+  or_times.append(timer() - start)
+
+  start = timer()
+  for i in liste_der_antworten:
+    isinstance(i, (list, tuple))
+  instance_times.append(timer() - start)
