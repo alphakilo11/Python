@@ -37,3 +37,7 @@ for i in range(100):
   for i in liste_der_antworten:
     isinstance(i, (list, tuple))
   instance_times.append(timer() - start)
+
+import statistics
+print(statistics.mean(or_times))
+print(statistics.mean(instance_times))
