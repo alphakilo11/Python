@@ -1,10 +1,10 @@
-# faster (0.05447242999980517 s)
+# faster (0.47474415699980455 s)
 start_value = 0
 
 start = timer()
 
 try:
-  for i in range(start_value, start_value + int(1e6)):
+  for i in range(start_value, start_value + int(1e7)):
     pass
 finally:
   print(timer() - start)
