@@ -3,7 +3,7 @@ import numpy as np
 from timeit import default_timer as timer
 from matplotlib import pyplot as plt
 
-attempts = 1000
+attempts = 100
 
 time_list = []
 for i in range(attempts):
