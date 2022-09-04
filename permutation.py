@@ -1,5 +1,4 @@
 # saves permutation variants to endergebnis variable
-#BUG it gets the right number of variations but they are only like 'dcba'
 
 from timeit import default_timer as timer
 
@@ -18,7 +17,7 @@ def permutation(folge):
     else:
         ergebnis[level] = folge[0]
         level = level - 1
-        endergebnis.append(ergebnis)
+        endergebnis.append(ergebnis.copy())
         
   
 folge = "abcdefghij"
