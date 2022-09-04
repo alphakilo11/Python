@@ -1,4 +1,5 @@
 # saves permutation variants to endergebnis variable
+#BUG it gets the right number of variations but they are only like 'dcba'
 
 from timeit import default_timer as timer
 
