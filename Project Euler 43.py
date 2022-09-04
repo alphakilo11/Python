@@ -24,7 +24,7 @@ def permutation(folge):
         
 def sub_string_divisibility(number):
   divisors = (2, 3, 5, 7, 11, 13, 17)
-  divisor = len(divisors) - 1 #iterating backwards is probably faster
+  divisor = len(divisors) - 1 #iterating backwards is probably 28.5% faster
   for i in range(7, 0, -1):
     if int(number[i: i+3]) % divisors[divisor] != 0:
       return False
