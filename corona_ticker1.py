@@ -1,4 +1,5 @@
 """Corona Ticker"""
+import time
 faelle_pro_tag = 132697
 tick = 3600 * 24 * 7/ faelle_pro_tag
 counter = 0
