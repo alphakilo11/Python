@@ -1,3 +1,4 @@
+"""https://projecteuler.net/problem=49"""
 import math
 from timeit import default_timer as timer
 def is_prime(number):
