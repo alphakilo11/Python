@@ -1,6 +1,8 @@
 import json
 """
 open timeline data and show the timestamps of all activities exceeding the cutoff travel distance
+PREREQUESITE Google Semantic Location History
+ENHANCE add automatic folder processing
 """
 cutoff_distance = 100000
 
