@@ -32,3 +32,14 @@ coordinate2 = (55.755833, 37.617222)
 distance_in_miles = geodesic(coordinate1, coordinate2).miles
 distannce_in_km = geodesic(coordinate1, coordinate2).km
 print(distannce_in_km)
+
+
+import geopy.distance
+import folium
+ankerpunkt = (47, 16)
+m = folium.Map(location=ankerpunkt, zoom_start=8)
+spam = geopy.distance.distance(kilometers=72).destination(geopy.distance.distance(kilometers=144).destination(ankerpunkt, bearing=0), bearing=90)
+folium.vector_layers.Rectangle(
+    bounds=[ankerpunkt, (spam[0], spam[1])]
+).add_to(m)
+m
