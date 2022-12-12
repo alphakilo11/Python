@@ -1,4 +1,5 @@
 # saves permutation variants to endergebnis variable
+# !!! https://docs.python.org/3/library/itertools.html#itertools.permutations is ~ 10x faster. !!!
 
 from timeit import default_timer as timer
 
