@@ -112,7 +112,9 @@ def create_table(data, winnerTakesItAll=True):
   result = {}
   for line in data:
     home_type = line[0]
+    home_score = line[3]
     away_type = line[2]
+    away_score = line[4]
     result.setdefault(home_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0})
     result.setdefault(away_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0})
     for result_word in BATTLE_RESULTS:
