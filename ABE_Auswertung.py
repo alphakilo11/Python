@@ -1,5 +1,5 @@
-#from google.colab import drive
-#drive.mount('/content/drive')
+from google.colab import drive
+drive.mount('/content/drive')
 
 BATTLE_RESULTS = {'WON': 'win', 'LOST': 'lost', 'DRAW': 'draw'}
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
@@ -136,7 +136,7 @@ def create_result_dict(data, starting_vehicles=10):
     result[home_type]['losses'] += (starting_vehicles - home_score)
     result[away_type]['kills'] += (starting_vehicles - home_score)
     result[away_type]['losses'] += (starting_vehicles - away_score)
-    
+
   return result
 
 def create_derived_data(data, winnerTakesItAll=True):
