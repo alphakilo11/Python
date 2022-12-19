@@ -1,7 +1,7 @@
 #from google.colab import drive
 #drive.mount('/content/drive')
 
-BATTLE_RESULTS = {'WON': 1, 'LOST': -1, 'DRAW': 0}
+BATTLE_RESULTS = {'WON': 'win', 'LOST': 'lost', 'DRAW': 'draw'}
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
   """
   extracts Automated Battle Engine results from Arma 3 rpt files
@@ -105,8 +105,11 @@ def create_matrix(data):
     entries.append(line[2])
   return sorted(set(entries)) # collect all
 
-def create_table(data, winnerTakesItAll=True):
+def create_result_dict(data):
   """
+  WIP
+  Create a dictionary with following entries: Type of Vehicle: {wins, lost_battles, draws, kills, lost vehicles}
+  This represents the base result data for each type.
   Requires input like this: [('csa38_cromwell_DCS', 'LOST', 'LIB_UK_DR_M4A3_75_DLV', '3', '10'), ('csa38_cromwell_245camo2', 'WON', 'CSA38_pzbfwIamb_DE', '10', '0')]
   """
   result = {}
@@ -115,13 +118,28 @@ def create_table(data, winnerTakesItAll=True):
     home_score = line[3]
     away_type = line[2]
     away_score = line[4]
-    result.setdefault(home_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0})
-    result.setdefault(away_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0})
-    for result_word in BATTLE_RESULTS:
-      if line[1] == result_word:
-        result[home_type][result_word] += 1
+    #create dictionary entries for each type
+    result.setdefault(home_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
+    result.setdefault(away_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
+    # increase the corresponding value
+    if home_score > away_score:
+      result[home_type][BATTLE_RESULTS['WON']] += 1
+      result[away_type][BATTLE_RESULTS['LOST']] += 1
+    elif home_score < away_score:
+      result[home_type][BATTLE_RESULTS['LOST']] += 1
+      result[away_type][BATTLE_RESULTS['WON']] += 1
+    else:
+      result[home_type][BATTLE_RESULTS['DRAW']] += 1
+      result[away_type][BATTLE_RESULTS['DRAW']] += 1
+    #set kills and lossess
+    result[home_type]['kills'] += 
 
-
+def create_derived_data(data, winnerTakesItAll=True):
+  """
+  WIP
+  Create a dictionary with following entries: Type of Vehicle: {score, number_of_battles, torverhältnis, kill-death-ratio}
+  This represents the result data, which is derived from the base data, for each type.
+  """
 
 
 
