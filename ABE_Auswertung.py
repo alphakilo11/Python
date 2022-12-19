@@ -110,14 +110,14 @@ def create_result_dict(data, starting_vehicles=10):
   WIP
   Create a dictionary with following entries: Type of Vehicle: {wins, lost_battles, draws, kills, lost vehicles}
   This represents the base result data for each type.
-  Requires input like this: [('csa38_cromwell_DCS', 'LOST', 'LIB_UK_DR_M4A3_75_DLV', '3', '10'), ('csa38_cromwell_245camo2', 'WON', 'CSA38_pzbfwIamb_DE', '10', '0')]
+  Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
   """
   result = {}
   for line in data:
     home_type = line[0]
-    home_score = line[3]
+    home_score = line[1]
     away_type = line[2]
-    away_score = line[4]
+    away_score = line[3]
     #create dictionary entries for each type
     result.setdefault(home_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
     result.setdefault(away_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
