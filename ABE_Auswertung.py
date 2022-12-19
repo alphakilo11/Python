@@ -132,7 +132,12 @@ def create_result_dict(data, starting_vehicles=10):
       result[home_type][BATTLE_RESULTS['DRAW']] += 1
       result[away_type][BATTLE_RESULTS['DRAW']] += 1
     #set kills and lossess
-    result[home_type]['kills'] += 
+    result[home_type]['kills'] += (starting_vehicles - away_score)
+    result[home_type]['losses'] += (starting_vehicles - home_score)
+    result[away_type]['kills'] += (starting_vehicles - home_score)
+    result[away_type]['losses'] += (starting_vehicles - away_score)
+    
+  return result
 
 def create_derived_data(data, winnerTakesItAll=True):
   """
