@@ -73,31 +73,12 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
 
   return step4
 
-def ABE_aufbereitung(daten):
-  """
-  Soll die Daten übersichticher darstellen.
-  Example:
-    print(ABE_aufbereitung(ABE_auswertung()))
-  """
-  output = []
-  for line in daten:
-    daheim = int(line[1])
-    auswaerts = int(line[3])
-    if daheim > auswaerts:
-      result = BATTLE_RESULTS['WON']
-    elif daheim < auswaerts:
-      result = BATTLE_RESULTS['LOST']
-    else:
-      result = BATTLE_RESULTS['DRAW']
-    output.append((line[0],result, line[2], line[1] , line[3]))
-  return output
-
 def create_matrix(data):
   """
   WIP
   Create a matrix
   Example:
-    print(create_matrix(ABE_auswertung()))
+    NIL
   """
   entries = []
   for line in data:
@@ -105,19 +86,24 @@ def create_matrix(data):
     entries.append(line[2])
   return sorted(set(entries)) # collect all
 
-def create_result_dict(data, starting_vehicles=10):
+
+def create_result_DataFrame(data, starting_vehicles=10):
   """
-  WIP
   Create a dictionary with following entries: Type of Vehicle: {wins, lost_battles, draws, kills, lost vehicles}
   This represents the base result data for each type.
   Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
+  Example:
+    create_result_DataFrame(ABE_auswertung())
   """
+
+  import pandas as pd
+
   result = {}
   for line in data:
     home_type = line[0]
-    home_score = line[1]
+    home_score = int(line[1])
     away_type = line[2]
-    away_score = line[3]
+    away_score = int(line[3])
     #create dictionary entries for each type
     result.setdefault(home_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
     result.setdefault(away_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
@@ -137,7 +123,8 @@ def create_result_dict(data, starting_vehicles=10):
     result[away_type]['kills'] += (starting_vehicles - home_score)
     result[away_type]['losses'] += (starting_vehicles - away_score)
 
-  return result
+  return pd.DataFrame.from_dict(result, orient='index')
+
 
 def create_derived_data(data, winnerTakesItAll=True):
   """
