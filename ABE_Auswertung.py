@@ -1,7 +1,7 @@
 #from google.colab import drive
 #drive.mount('/content/drive')
 
-BATTLE_RESULTS = ('WON', 'LOST', 'DRAW')
+BATTLE_RESULTS = ('WON', 'LOST', 'DRAW') # switch this to a dictionary to be more clear
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
   """
   extracts Automated Battle Engine results from Arma 3 rpt files
@@ -113,10 +113,13 @@ def create_table(data, winnerTakesItAll=True):
   for line in data:
     home_type = line[0]
     away_type = line[2]
-    result.setdefault(home_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0,})
-    result.setdefault(away_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0,})
+    result.setdefault(home_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0})
+    result.setdefault(away_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0})
     for result_word in BATTLE_RESULTS:
       if line[1] == result_word:
+        result[home_type][result_word] += 1
+
+
 
 
 
