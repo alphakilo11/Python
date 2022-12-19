@@ -133,14 +133,3 @@ def create_result_DataFrame(data, starting_vehicles=10):
   result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else row.kills, axis=1)
 
   return result
-
-
-def create_derived_data(data, winnerTakesItAll=True):
-  """
-  WIP
-  Create a dictionary with following entries: Type of Vehicle: {score, number_of_battles, torverhältnis, kill-death-ratio}
-  This represents the result data, which is derived from the base data, for each type.
-  """
-
-
-
