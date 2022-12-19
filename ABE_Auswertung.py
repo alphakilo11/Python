@@ -1,6 +1,7 @@
 #from google.colab import drive
 #drive.mount('/content/drive')
 
+BATTLE_RESULTS = ('WON', 'LOST', 'DRAW')
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
   """
   extracts Automated Battle Engine results from Arma 3 rpt files
@@ -83,11 +84,11 @@ def ABE_aufbereitung(daten):
     daheim = int(line[1])
     auswaerts = int(line[3])
     if daheim > auswaerts:
-      result = 'WON'
+      result = BATTLE_RESULTS[0]
     elif daheim < auswaerts:
-      result = 'LOST'
+      result = BATTLE_RESULTS[1]
     else:
-      result = 'DRAW'
+      result = BATTLE_RESULTS[2]
     output.append((line[0],result, line[2], line[1] , line[3]))
   return output
 
@@ -103,3 +104,19 @@ def create_matrix(data):
     entries.append(line[0])
     entries.append(line[2])
   return sorted(set(entries)) # collect all
+
+def create_table(data, winnerTakesItAll=True):
+  """
+  Requires input like this: [('csa38_cromwell_DCS', 'LOST', 'LIB_UK_DR_M4A3_75_DLV', '3', '10'), ('csa38_cromwell_245camo2', 'WON', 'CSA38_pzbfwIamb_DE', '10', '0')]
+  """
+  result = {}
+  for line in data:
+    home_type = line[0]
+    away_type = line[2]
+    result.setdefault(home_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0,})
+    result.setdefault(away_type, {BATTLE_RESULTS[0]: 0, BATTLE_RESULTS[1]: 0, BATTLE_RESULTS[2]: 0,})
+    for result_word in BATTLE_RESULTS:
+      if line[1] == result_word:
+
+
+
