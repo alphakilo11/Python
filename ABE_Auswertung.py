@@ -1,7 +1,7 @@
 from google.colab import drive
 drive.mount('/content/drive')
 
-BATTLE_RESULTS = {'WON': 'win', 'LOST': 'lost', 'DRAW': 'draw'}
+BATTLE_RESULTS = {'WON': 'battle_win', 'LOST': 'battle_lost', 'DRAW': 'battle_draw'}
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
   """
   extracts Automated Battle Engine results from Arma 3 rpt files
@@ -73,6 +73,7 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
 
   return step4
 
+
 def create_matrix(data):
   """
   WIP
@@ -93,7 +94,7 @@ def create_result_DataFrame(data, starting_vehicles=10):
   This represents the base result data for each type.
   Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
   Example:
-    create_result_DataFrame(ABE_auswertung())
+    create_result_DataFrame(ABE_auswertung()).sort_values('kills')
   """
 
   import pandas as pd
@@ -122,6 +123,11 @@ def create_result_DataFrame(data, starting_vehicles=10):
     result[home_type]['losses'] += (starting_vehicles - home_score)
     result[away_type]['kills'] += (starting_vehicles - home_score)
     result[away_type]['losses'] += (starting_vehicles - away_score)
+    # add derived data
+    result['score'] = result.apply(lambda row: row.BATTLE_RESULTS['WON'] * 3 + row.BATTLE_RESULTS['DRAW'], axis=1)
+    result['number_of_battles'] = result.apply(lambda row: row.BATTLE_RESULTS['WON'] + row.BATTLE_RESULTS['LOST'] + row.BATTLE_RESULTS['DRAW'], axis=1)
+    result['torverhaeltnis'] = result.apply(lambda row: row.kills - row.losses, axis=1)
+    result['kill-death-ratio'] = result.apply(lambda row: row.kills / row.losses, axis=1)
 
   return pd.DataFrame.from_dict(result, orient='index')
 
