@@ -7,8 +7,6 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
   Example:
     print(ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1"))
   ENHANCE use regex
-  ENHANCE include datetime (filename + timestamp) - but what's the benefit?
-  ENHANCE ignore other files
   """
   from os import listdir, makedirs
   from os.path import isfile, join, exists
