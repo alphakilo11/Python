@@ -1,10 +1,9 @@
-from google.colab import drive
-drive.mount('/content/drive')
+#from google.colab import drive
+#drive.mount('/content/drive')
 
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
   """
   extracts Automated Battle Engine results from Arma 3 rpt files
-
   Example:
     print(ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1"))
   ENHANCE use regex
@@ -79,7 +78,7 @@ def ABE_aufbereitung(daten):
   """
   Soll die Daten übersichticher darstellen.
   Example:
-    print(ABE_aufbereitung(ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")))
+    print(ABE_aufbereitung(ABE_auswertung()))
   """
   output = []
   for line in daten:
@@ -99,7 +98,7 @@ def create_matrix(data):
   WIP
   Create a matrix
   Example:
-    print(create_matrix(ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")))
+    print(create_matrix(ABE_auswertung()))
   """
   entries = []
   for line in data:
