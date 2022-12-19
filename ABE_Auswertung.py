@@ -1,7 +1,7 @@
 #from google.colab import drive
 #drive.mount('/content/drive')
 
-BATTLE_RESULTS = ('WON', 'LOST', 'DRAW') # switch this to a dictionary to be more clear
+BATTLE_RESULTS = {'WON': 1, 'LOST': -1, 'DRAW': 0}
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
   """
   extracts Automated Battle Engine results from Arma 3 rpt files
@@ -84,11 +84,11 @@ def ABE_aufbereitung(daten):
     daheim = int(line[1])
     auswaerts = int(line[3])
     if daheim > auswaerts:
-      result = BATTLE_RESULTS[0]
+      result = BATTLE_RESULTS['WON']
     elif daheim < auswaerts:
-      result = BATTLE_RESULTS[1]
+      result = BATTLE_RESULTS['LOST']
     else:
-      result = BATTLE_RESULTS[2]
+      result = BATTLE_RESULTS['DRAW']
     output.append((line[0],result, line[2], line[1] , line[3]))
   return output
 
