@@ -94,7 +94,7 @@ def create_result_DataFrame(data, starting_vehicles=10):
   This represents the base result data for each type.
   Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
   Example:
-    create_result_DataFrame(ABE_auswertung()).sort_values('kills')
+    create_result_DataFrame(ABE_auswertung()).sort_values('score')
   """
 
   import pandas as pd
@@ -123,13 +123,16 @@ def create_result_DataFrame(data, starting_vehicles=10):
     result[home_type]['losses'] += (starting_vehicles - home_score)
     result[away_type]['kills'] += (starting_vehicles - home_score)
     result[away_type]['losses'] += (starting_vehicles - away_score)
-    # add derived data
-    result['score'] = result.apply(lambda row: row.BATTLE_RESULTS['WON'] * 3 + row.BATTLE_RESULTS['DRAW'], axis=1)
-    result['number_of_battles'] = result.apply(lambda row: row.BATTLE_RESULTS['WON'] + row.BATTLE_RESULTS['LOST'] + row.BATTLE_RESULTS['DRAW'], axis=1)
-    result['torverhaeltnis'] = result.apply(lambda row: row.kills - row.losses, axis=1)
-    result['kill-death-ratio'] = result.apply(lambda row: row.kills / row.losses, axis=1)
 
-  return pd.DataFrame.from_dict(result, orient='index')
+  #convert to Pandas DataFrame
+  result = pd.DataFrame.from_dict(result, orient='index')
+  # add derived data
+  result['score'] = result.apply(lambda row: row.battle_win * 3 + row.battle_draw, axis=1)
+  result['number_of_battles'] = result.apply(lambda row: row.battle_win + row.battle_lost + row.battle_draw, axis=1)
+  result['torverhaeltnis'] = result.apply(lambda row: row.kills - row.losses, axis=1)
+  result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else row.kills, axis=1)
+
+  return result
 
 
 def create_derived_data(data, winnerTakesItAll=True):
