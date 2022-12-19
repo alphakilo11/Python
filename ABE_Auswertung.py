@@ -105,7 +105,7 @@ def create_matrix(data):
     entries.append(line[2])
   return sorted(set(entries)) # collect all
 
-def create_result_dict(data):
+def create_result_dict(data, starting_vehicles=10):
   """
   WIP
   Create a dictionary with following entries: Type of Vehicle: {wins, lost_battles, draws, kills, lost vehicles}
