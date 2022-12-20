@@ -59,8 +59,82 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
   else:
     print(f'No {source_file_type} files in {source_file_path}')
 
+
+def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1'):
+  """
+  extracts Automated Battle Engine results and collects them in lists
+  vanilla results have a length of 4
+  Example:
+    break_apart_vanilla("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
+  ENHANCE use regex
+  """
+  import ast
+  with open(folderpath + '/AKBL_collected_results.txt', 'r') as file:
+    result_lines = file.readlines()
+  compendium = []
+  for line in result_lines:
+    if 'Survivors: ' in line: # check if it is vanilla
+      compendium.append(line.split('Survivors: ')[1].split('.')[0].split(';'))
+    else:
+      compendium.append(ast.literal_eval("[" + line.split('AKBL Result: ')[1][2:]))
+  return compendium
+
+
+def create_result_DataFrame_vanilla(data, starting_vehicles=10):
+  """
+  Create a Pandas DataFrame with following entries: ['battle_win', 'battle_lost', 'battle_draw', 'kills', 'losses', 'score', 'number_of_battles', 'torverhaeltnis', 'kill-death-ratio']
+  Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
+  Example:
+    create_result_DataFrame_vanilla(break_apart()).sort_values('score')
+  """
+
+  import pandas as pd
+
+  result = {}
+  for line in data:
+    if len(line) != 4: # check for vanilla data format
+      home_type = line[1]
+      home_score = int(line[2])
+      away_type = line[3]
+      away_score = int(line[4])
+    else:
+      home_type = line[0]
+      home_score = int(line[1])
+      away_type = line[2]
+      away_score = int(line[3])
+    #create dictionary entries for each type
+    result.setdefault(home_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
+    result.setdefault(away_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
+    # increase the corresponding value
+    if home_score > away_score:
+      result[home_type][BATTLE_RESULTS['WON']] += 1
+      result[away_type][BATTLE_RESULTS['LOST']] += 1
+    elif home_score < away_score:
+      result[home_type][BATTLE_RESULTS['LOST']] += 1
+      result[away_type][BATTLE_RESULTS['WON']] += 1
+    else:
+      result[home_type][BATTLE_RESULTS['DRAW']] += 1
+      result[away_type][BATTLE_RESULTS['DRAW']] += 1
+    #set kills and lossess
+    result[home_type]['kills'] += (starting_vehicles - away_score)
+    result[home_type]['losses'] += (starting_vehicles - home_score)
+    result[away_type]['kills'] += (starting_vehicles - home_score)
+    result[away_type]['losses'] += (starting_vehicles - away_score)
+
+  #convert to Pandas DataFrame
+  result = pd.DataFrame.from_dict(result, orient='index')
+  # add derived data
+  result['score'] = result.apply(lambda row: row.battle_win * 3 + row.battle_draw, axis=1)
+  result['number_of_battles'] = result.apply(lambda row: row.battle_win + row.battle_lost + row.battle_draw, axis=1)
+  result['torverhaeltnis'] = result.apply(lambda row: row.kills - row.losses, axis=1)
+  result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else (row.kills / 0.4), axis=1) # I assigned some value 0 < x < 1 to types with 0 losses
+
+  return result
+
+
 def break_apart_vanilla(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1'):
   """
+  OBSOLETE
   extracts Automated Battle Engine (Vanilla Version) results and collects them in lists
   Example:
     break_apart_vanilla("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
@@ -102,49 +176,3 @@ def create_matrix(data):
     entries.append(line[0])
     entries.append(line[2])
   return sorted(set(entries)) # collect all
-
-
-def create_result_DataFrame_vanilla(data, starting_vehicles=10):
-  """
-  Create a Pandas DataFrame with following entries: ['battle_win', 'battle_lost', 'battle_draw', 'kills', 'losses', 'score', 'number_of_battles', 'torverhaeltnis', 'kill-death-ratio']
-  Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
-  Example:
-    create_result_DataFrame_vanilla(break_apart_vanilla()).sort_values('score')
-  """
-
-  import pandas as pd
-
-  result = {}
-  for line in data:
-    home_type = line[0]
-    home_score = int(line[1])
-    away_type = line[2]
-    away_score = int(line[3])
-    #create dictionary entries for each type
-    result.setdefault(home_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
-    result.setdefault(away_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
-    # increase the corresponding value
-    if home_score > away_score:
-      result[home_type][BATTLE_RESULTS['WON']] += 1
-      result[away_type][BATTLE_RESULTS['LOST']] += 1
-    elif home_score < away_score:
-      result[home_type][BATTLE_RESULTS['LOST']] += 1
-      result[away_type][BATTLE_RESULTS['WON']] += 1
-    else:
-      result[home_type][BATTLE_RESULTS['DRAW']] += 1
-      result[away_type][BATTLE_RESULTS['DRAW']] += 1
-    #set kills and lossess
-    result[home_type]['kills'] += (starting_vehicles - away_score)
-    result[home_type]['losses'] += (starting_vehicles - home_score)
-    result[away_type]['kills'] += (starting_vehicles - home_score)
-    result[away_type]['losses'] += (starting_vehicles - away_score)
-
-  #convert to Pandas DataFrame
-  result = pd.DataFrame.from_dict(result, orient='index')
-  # add derived data
-  result['score'] = result.apply(lambda row: row.battle_win * 3 + row.battle_draw, axis=1)
-  result['number_of_battles'] = result.apply(lambda row: row.battle_win + row.battle_lost + row.battle_draw, axis=1)
-  result['torverhaeltnis'] = result.apply(lambda row: row.kills - row.losses, axis=1)
-  result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else (row.kills / 0.4), axis=1) # I assigned some value 0 < x < 1 to types with 0 losses
-
-  return result
