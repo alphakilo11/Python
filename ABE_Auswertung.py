@@ -4,7 +4,7 @@ drive.mount('/content/drive')
 BATTLE_RESULTS = {'WON': 'battle_win', 'LOST': 'battle_lost', 'DRAW': 'battle_draw'}
 def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
   """
-  extracts Automated Battle Engine results from Arma 3 rpt files
+  extracts and splits Automated Battle Engine results from Arma 3 rpt files located in source_file_path to different files
   Example:
     print(ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1"))
   ENHANCE use regex
@@ -25,7 +25,7 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
         step2 = []
         for line in step1:
           if 'AKBL' in line:
-            if 'AKBL Result: Survivors:' in line:
+            if 'AKBL Result: ' in line:
               date = file[-23:-13] + ' ' # convert filename to timestamp
               akbl_results.append(date + line)
               del date 
@@ -60,6 +60,12 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
     print(f'No {source_file_type} files in {source_file_path}')
 
 def break_apart_vanilla(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1'):
+  """
+  extracts Automated Battle Engine (Vanilla Version) results and collects them in lists
+  Example:
+    break_apart_vanilla("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
+  ENHANCE use regex
+  """
   # break apart Result Lines
   with open(folderpath + '/AKBL_collected_results.txt', 'r') as file:
     step2 = file.readlines()
