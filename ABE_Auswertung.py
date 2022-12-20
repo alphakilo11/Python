@@ -6,7 +6,7 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
   """
   extracts and splits Automated Battle Engine results from Arma 3 rpt files located in source_file_path to different files
   Example:
-    print(ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1"))
+    ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
   ENHANCE use regex
   """
   from os import listdir, makedirs
