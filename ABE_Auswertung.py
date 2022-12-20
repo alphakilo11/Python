@@ -53,23 +53,33 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
     if len(akbl_results) > 0:
       with open(folderpath + '/AKBL_collected_results.txt', 'a') as file:
         file.writelines(akbl_results)
+    # print status
     print(f'{len(file_list) - skipped_files} files have been processed. {skipped_files} files have been skipped.')
     del akbl_results, file_list, skipped_files
   else:
     print(f'No {source_file_type} files in {source_file_path}')
 
+def break_apart_vanilla(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1'):
   # break apart Result Lines
   with open(folderpath + '/AKBL_collected_results.txt', 'r') as file:
     step2 = file.readlines()
   step3 = []
+  skipped_lines = 0
   for line in step2:
-    step3.append(line.split('Survivors: ')[1])
+    if 'Survivors: ' in line: # 'Survivors: ' means that it's a version without Version number
+      step3.append(line.split('Survivors: ')[1])
+    else:
+      skipped_lines += 1
+
   del step2
   # break apart further
   step4 = []
   for line in step3:
     step4.append((line.split('.')[0].split(';')))
   del step3
+
+  if skipped_lines > 0:
+    print(skipped_lines, 'lines skipped. Reason: incompatibility. Use a more recent version of the auswertung.')
 
   return step4
 
