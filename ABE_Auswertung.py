@@ -109,7 +109,7 @@ def create_result_DataFrame_vanilla(data, starting_vehicles=10):
   Create a Pandas DataFrame with following entries: ['battle_win', 'battle_lost', 'battle_draw', 'kills', 'losses', 'score', 'number_of_battles', 'torverhaeltnis', 'kill-death-ratio']
   Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
   Example:
-    create_result_DataFrame(ABE_auswertung()).sort_values('score')
+    create_result_DataFrame_vanilla(break_apart_vanilla()).sort_values('score')
   """
 
   import pandas as pd
