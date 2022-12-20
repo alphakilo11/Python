@@ -129,6 +129,6 @@ def create_result_DataFrame(data, starting_vehicles=10):
   result['score'] = result.apply(lambda row: row.battle_win * 3 + row.battle_draw, axis=1)
   result['number_of_battles'] = result.apply(lambda row: row.battle_win + row.battle_lost + row.battle_draw, axis=1)
   result['torverhaeltnis'] = result.apply(lambda row: row.kills - row.losses, axis=1)
-  result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else row.kills, axis=1)
+  result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else (row.kills / 0.4), axis=1) # I assigned some value 0 < x < 1 to types with 0 losses
 
   return result
