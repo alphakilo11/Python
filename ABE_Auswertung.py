@@ -1,5 +1,6 @@
 from google.colab import drive
 drive.mount('/content/drive')
+
 # constants
 BATTLE_RESULTS = {'WON': 'battle_win', 'LOST': 'battle_lost', 'DRAW': 'battle_draw'}
 RESULT_FORMAT = { # the information sequence for the battlelogger result line for each version
@@ -25,7 +26,7 @@ RESULT_FORMAT = { # the information sequence for the battlelogger result line fo
   ]
 }
 
-def ABE_auswertung( \
+def file_operation( \
   folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', \
   source_file_path='/incoming',\
   source_file_type='.rpt',\
@@ -33,7 +34,7 @@ def ABE_auswertung( \
   """
   extracts and splits Automated Battle Engine results from Arma 3 rpt files located in source_file_path to different files
   Example:
-    ABE_auswertung("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
+    file_operation("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
   ENHANCE use regex
   """
   from os import listdir, makedirs
