@@ -1,8 +1,35 @@
 from google.colab import drive
 drive.mount('/content/drive')
-
+# constants
 BATTLE_RESULTS = {'WON': 'battle_win', 'LOST': 'battle_lost', 'DRAW': 'battle_draw'}
-def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', source_file_path='/incoming', source_file_type='.rpt'):
+RESULT_FORMAT = { # the information sequence for the battlelogger result line for each version
+  'vanilla': ['home_type', 'home_score', 'away_type', 'away_score'],
+  '1.01': [
+    "AKBL Result: ",
+    'AK_var_fnc_battlelogger_Version',
+    'AK_var_fnc_battlelogger_typeEAST',
+    'east_veh_survivors',
+    'AK_var_fnc_battlelogger_typeINDEP',
+    'indep_veh_survivors',
+    'AK_var_fnc_battlelogger_numberOfStartingVehicles',
+    'worldName',
+    'AK_var_fnc_automatedBattleEngine_location',
+    'AK_var_fnc_battlelogger_engagementDistance',
+    'AK_var_fnc_battlelogger_vehSpacing',
+    'AK_var_fnc_battlelogger_breiteGefStr',
+    'AK_var_fnc_battlelogger_platoonSize',
+    'AK_var_fnc_battlelogger_startTime',
+    'systemTime',
+    'sunOrMoon',
+    'moonIntensity'
+  ]
+}
+
+def ABE_auswertung( \
+  folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', \
+  source_file_path='/incoming',\
+  source_file_type='.rpt',\
+  version='1.01'):
   """
   extracts and splits Automated Battle Engine results from Arma 3 rpt files located in source_file_path to different files
   Example:
@@ -24,11 +51,9 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
           step1 = datei.readlines()
         step2 = []
         for line in step1:
-          if 'AKBL' in line:
-            if 'AKBL Result: ' in line:
-              date = file[-23:-13] + ' ' # convert filename to timestamp
-              akbl_results.append(date + line)
-              del date 
+          if 'AKBL' in line: # check if it's an AKBL line
+            if RESULT_FORMAT[version][0] in line: # check if it's result line
+              akbl_results.append(line)
             step2.append(line)
         #create folders if necessary
         newpath = folderpath + '/archive' 
@@ -60,9 +85,9 @@ def ABE_auswertung(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated 
     print(f'No {source_file_type} files in {source_file_path}')
 
 
-def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1'):
+def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1', version='1.01'):
   """
-  extracts Automated Battle Engine results and collects them in lists
+  extracts Automated Battle Engine results and collects them in dictionaries
   vanilla results have a length of 4
   Example:
     break_apart_vanilla("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
@@ -76,7 +101,7 @@ def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Bat
     if 'Survivors: ' in line: # check if it is vanilla
       compendium.append(line.split('Survivors: ')[1].split('.')[0].split(';'))
     else:
-      compendium.append(ast.literal_eval("[" + line.split('AKBL Result: ')[1][2:]))
+      compendium.append(ast.literal_eval("[" + line.split(RESULT_FORMAT[version][0])[1][2:]))
   return compendium
 
 
@@ -88,16 +113,35 @@ def create_result_DataFrame(data, starting_vehicles=10):
     create_result_DataFrame(break_apart()).sort_values('score')
   """
 
+  import datetime
+  import numpy as np
   import pandas as pd
 
   result = {}
   for line in data:
-    if len(line) != 4: # check for vanilla data format
+    if len(line) != 4: # check for post-vanilla data format
+      # don'T forget to get rid of the first element of RESULT_FORMAT
+      version_number = line[0]
       home_type = line[1]
-      home_score = int(line[2])
+      home_score = line[2]
       away_type = line[3]
-      away_score = int(line[4])
-    else:
+      away_score = line[4]
+      starting_vehicles = line[5]
+      map_name = line[6]
+      location_koordinates = line[7]
+      engagement_distance = np.linalg.norm(line[8]) # distance between starting positions in m
+      vehicle_spacing = line[9]
+      breiteGefechtsStreifen = line[10]
+      platoonSize = line[11]
+      line[12][6] *= 1000 #convert miliseconds to microseconds
+      battle_start_time = datetime.datetime(*line[12])
+      line[13][6] *= 1000 #convert miliseconds to microseconds
+      battle_end_time = datetime.datetime(*line[13])
+      sunOrMoon = line[14]
+      moonIntensity = line[15]
+
+
+    else: # this is for the vanilla data format
       home_type = line[0]
       home_score = int(line[1])
       away_type = line[2]
