@@ -80,12 +80,12 @@ def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Bat
   return compendium
 
 
-def create_result_DataFrame_vanilla(data, starting_vehicles=10):
+def create_result_DataFrame(data, starting_vehicles=10):
   """
   Create a Pandas DataFrame with following entries: ['battle_win', 'battle_lost', 'battle_draw', 'kills', 'losses', 'score', 'number_of_battles', 'torverhaeltnis', 'kill-death-ratio']
   Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
   Example:
-    create_result_DataFrame_vanilla(break_apart()).sort_values('score')
+    create_result_DataFrame(break_apart()).sort_values('score')
   """
 
   import pandas as pd
@@ -130,38 +130,6 @@ def create_result_DataFrame_vanilla(data, starting_vehicles=10):
   result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else (row.kills / 0.4), axis=1) # I assigned some value 0 < x < 1 to types with 0 losses
 
   return result
-
-
-def break_apart_vanilla(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1'):
-  """
-  OBSOLETE
-  extracts Automated Battle Engine (Vanilla Version) results and collects them in lists
-  Example:
-    break_apart_vanilla("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
-  ENHANCE use regex
-  """
-  # break apart Result Lines
-  with open(folderpath + '/AKBL_collected_results.txt', 'r') as file:
-    step2 = file.readlines()
-  step3 = []
-  skipped_lines = 0
-  for line in step2:
-    if 'Survivors: ' in line: # 'Survivors: ' means that it's a version without Version number
-      step3.append(line.split('Survivors: ')[1])
-    else:
-      skipped_lines += 1
-
-  del step2
-  # break apart further
-  step4 = []
-  for line in step3:
-    step4.append((line.split('.')[0].split(';')))
-  del step3
-
-  if skipped_lines > 0:
-    print(skipped_lines, 'lines skipped. Reason: incompatibility. Use a more recent version of the auswertung.')
-
-  return step4
 
 
 def create_matrix(data):
