@@ -101,6 +101,8 @@ def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Bat
     if 'Survivors: ' in line: # check if it is vanilla
       keys = RESULT_FORMAT['vanilla']
       values = line.split('Survivors: ')[1].split('.')[0].split(';')
+      values[1] = int(values[1])
+      values[3] = int(values[3])
       compendium.append(dict(zip(keys,values)))
     else:
       keys = RESULT_FORMAT[version][1:] # strip the first entry is it contains no relevant information
