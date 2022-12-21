@@ -3,7 +3,7 @@ drive.mount('/content/drive')
 # constants
 BATTLE_RESULTS = {'WON': 'battle_win', 'LOST': 'battle_lost', 'DRAW': 'battle_draw'}
 RESULT_FORMAT = { # the information sequence for the battlelogger result line for each version
-  'vanilla': ['home_type', 'home_score', 'away_type', 'away_score'],
+  'vanilla': ['AK_var_fnc_battlelogger_typeEAST', 'east_veh_survivors', 'AK_var_fnc_battlelogger_typeINDEP', 'indep_veh_survivors'],
   '1.01': [
     "AKBL Result: ",
     'AK_var_fnc_battlelogger_Version',
@@ -90,7 +90,7 @@ def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Bat
   extracts Automated Battle Engine results and collects them in dictionaries
   vanilla results have a length of 4
   Example:
-    break_apart_vanilla("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
+    break_apart("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
   ENHANCE use regex
   """
   import ast
@@ -99,71 +99,47 @@ def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Bat
   compendium = []
   for line in result_lines:
     if 'Survivors: ' in line: # check if it is vanilla
-      compendium.append(line.split('Survivors: ')[1].split('.')[0].split(';'))
+      keys = RESULT_FORMAT['vanilla']
+      values = line.split('Survivors: ')[1].split('.')[0].split(';')
+      compendium.append(dict(zip(keys,values)))
     else:
-      compendium.append(ast.literal_eval("[" + line.split(RESULT_FORMAT[version][0])[1][2:]))
+      keys = RESULT_FORMAT[version][1:] # strip the first entry is it contains no relevant information
+      values = ast.literal_eval("[" + line.split(RESULT_FORMAT[version][0])[1][2:])
+      compendium.append(dict(zip(keys,values)))
   return compendium
 
 
-def create_result_DataFrame(data, starting_vehicles=10):
+def create_result_DataFrame(data, starting_vehicles=10, version='1.01'):
   """
   Create a Pandas DataFrame with following entries: ['battle_win', 'battle_lost', 'battle_draw', 'kills', 'losses', 'score', 'number_of_battles', 'torverhaeltnis', 'kill-death-ratio']
-  Requires input from ABE_auswertung (like this: [['csa38_cromwell_DCS', '3', 'LIB_UK_DR_M4A3_75_DLV', '10'], ['csa38_cromwell_245camo2', '10', 'CSA38_pzbfwIamb_DE', '0']])
+  Requires input as dictionaries obeying RESULT_FORMAT
   Example:
     create_result_DataFrame(break_apart()).sort_values('score')
   """
-
-  import datetime
-  import numpy as np
+  
   import pandas as pd
 
   result = {}
   for line in data:
-    if len(line) != 4: # check for post-vanilla data format
-      # don'T forget to get rid of the first element of RESULT_FORMAT
-      version_number = line[0]
-      home_type = line[1]
-      home_score = line[2]
-      away_type = line[3]
-      away_score = line[4]
-      starting_vehicles = line[5]
-      map_name = line[6]
-      location_koordinates = line[7]
-      engagement_distance = np.linalg.norm(line[8]) # distance between starting positions in m
-      vehicle_spacing = line[9]
-      breiteGefechtsStreifen = line[10]
-      platoonSize = line[11]
-      line[12][6] *= 1000 #convert miliseconds to microseconds
-      battle_start_time = datetime.datetime(*line[12])
-      line[13][6] *= 1000 #convert miliseconds to microseconds
-      battle_end_time = datetime.datetime(*line[13])
-      sunOrMoon = line[14]
-      moonIntensity = line[15]
 
-
-    else: # this is for the vanilla data format
-      home_type = line[0]
-      home_score = int(line[1])
-      away_type = line[2]
-      away_score = int(line[3])
     #create dictionary entries for each type
-    result.setdefault(home_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
-    result.setdefault(away_type, {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
+    result.setdefault(line['AK_var_fnc_battlelogger_typeEAST'], {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
+    result.setdefault(line['AK_var_fnc_battlelogger_typeINDEP'], {BATTLE_RESULTS['WON']: 0, BATTLE_RESULTS['LOST']: 0, BATTLE_RESULTS['DRAW']: 0, 'kills': 0, 'losses': 0})
     # increase the corresponding value
-    if home_score > away_score:
-      result[home_type][BATTLE_RESULTS['WON']] += 1
-      result[away_type][BATTLE_RESULTS['LOST']] += 1
-    elif home_score < away_score:
-      result[home_type][BATTLE_RESULTS['LOST']] += 1
-      result[away_type][BATTLE_RESULTS['WON']] += 1
+    if line['east_veh_survivors'] > line['indep_veh_survivors']:
+      result[line['AK_var_fnc_battlelogger_typeEAST']][BATTLE_RESULTS['WON']] += 1
+      result[line['AK_var_fnc_battlelogger_typeINDEP']][BATTLE_RESULTS['LOST']] += 1
+    elif line['east_veh_survivors'] < line['indep_veh_survivors']:
+      result[line['AK_var_fnc_battlelogger_typeEAST']][BATTLE_RESULTS['LOST']] += 1
+      result[line['AK_var_fnc_battlelogger_typeINDEP']][BATTLE_RESULTS['WON']] += 1
     else:
-      result[home_type][BATTLE_RESULTS['DRAW']] += 1
-      result[away_type][BATTLE_RESULTS['DRAW']] += 1
+      result[line['AK_var_fnc_battlelogger_typeEAST']][BATTLE_RESULTS['DRAW']] += 1
+      result[line['AK_var_fnc_battlelogger_typeINDEP']][BATTLE_RESULTS['DRAW']] += 1
     #set kills and lossess
-    result[home_type]['kills'] += (starting_vehicles - away_score)
-    result[home_type]['losses'] += (starting_vehicles - home_score)
-    result[away_type]['kills'] += (starting_vehicles - home_score)
-    result[away_type]['losses'] += (starting_vehicles - away_score)
+    result[line['AK_var_fnc_battlelogger_typeEAST']]['kills'] += (starting_vehicles - line['indep_veh_survivors'])
+    result[line['AK_var_fnc_battlelogger_typeEAST']]['losses'] += (starting_vehicles - line['east_veh_survivors'])
+    result[line['AK_var_fnc_battlelogger_typeINDEP']]['kills'] += (starting_vehicles - line['east_veh_survivors'])
+    result[line['AK_var_fnc_battlelogger_typeINDEP']]['losses'] += (starting_vehicles - line['indep_veh_survivors'])
 
   #convert to Pandas DataFrame
   result = pd.DataFrame.from_dict(result, orient='index')
