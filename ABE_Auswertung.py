@@ -184,6 +184,22 @@ def battle_duration(data):
       ... # ENHANCE extract battle duration from timestamps
   return durations
 
+def duration_report(duration_data, timeout=600):
+  timeout += 10 # as of V1.01 the logger checks every 10 seconds therefore the actual timeout-time will be 10 seconds after the set value # HEADSUP if timeout is logged I have to change this
+
+  keys = []
+  values = []
+
+  percentile = 95
+  duration_data.sort()
+  nbr_of_timouts = len(duration_data) - duration_data.index(timeout)
+  keys.append(f's. After this time {percentile} % of battles will timeout.')
+  values.append(duration_data[-int(nbr_of_timouts / percentile * 100)])
+
+  for keys, values in dict(zip(keys, values)).items():
+    print(values, keys)
+
+
 def create_matrix(data):
   """
   WIP
