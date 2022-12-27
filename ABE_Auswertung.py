@@ -237,9 +237,19 @@ def duration_report(duration_data, timeout=600):
     return np.mean(result)
 
   collector = []
-  for percentile in range(70, 80, 1):
+  for percentile in range(70, 80, 1): # remove magic numbers
     collector.append([abs(100 - percentile), np.percentile(duration_data, percentile), hyp_avg_duration(duration_data, np.percentile(duration_data, percentile))])
-  print(pd.DataFrame(collector, columns=['%', 'Timeout','avg length']))
+  collector = pd.DataFrame(collector, columns=['%', 'Timeout','avg length'])
+  print(collector)
+
+  x = collector['%']
+  y = collector['avg length']
+  fig, ax1 = plt.subplots()
+  ax1.plot(x, y, 'g-')
+  ax1.set_ylabel('avg duration', color='g')
+  ax1.set_xlabel('Timout %')
+  plt.show()
+
 
   return compendium
 
