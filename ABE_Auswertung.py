@@ -220,13 +220,7 @@ def duration_report(duration_data, timeout=BATTLE_PARAMETERS['timeout']):
   keys.append('s. Median battle duration.')
   values.append(np.median(duration_data))
 
-  # wrap in a dictionary
-  compendium = dict(zip(keys, values))
-  #print data
-  for keys, values in compendium.items():
-    print(values, keys)
-  
-
+  #plots
   out = pd.cut(battle_duration(break_apart()), bins=20)
   ax = out.value_counts().plot.bar(rot=0, figsize=(30, 9))
   ax.set_title("Grouped battle duration")
@@ -241,22 +235,34 @@ def duration_report(duration_data, timeout=BATTLE_PARAMETERS['timeout']):
         result.append(timeout)
       else:
         result.append(i)
-    return np.mean(result) + 30 # add 30 s for avg. ABE delay
+    return np.mean(result) + (BATTLE_PARAMETERS['ABE_delay'] / 2) # add avg. ABE delay
 
   collector = []
-  for percentile in range(50, 83, 1): # remove magic numbers
-    collector.append([abs(100 - percentile), np.percentile(duration_data, percentile), hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)), 3600 / hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)), 3600 / hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)) * (percentile/100)])
-  collector = pd.DataFrame(collector, columns=['%', 'Timeout','avg duration', 'battles/h', 'completed_battles/h'])
-  print(collector)
+  for percentile in range(1, 100, 1):
+    collector.append([
+      abs(100 - percentile), 
+      np.percentile(duration_data, percentile), 
+      hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)), 
+      3600 / hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)), 
+      3600 / hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)) * (percentile/100)
+    ])
+  collector = pd.DataFrame(collector, columns=['%', 'Timeout','avg cycle duration', 'battles/h', 'completed_battles/h'])
+  keys.append('s. Timeout value that would maximize the number of non-timeout-battles per hour.')
+  values.append(collector.iloc[collector['completed_battles/h'].idxmax()]['Timeout'])
 
-  x = collector['%']
-  y = collector['battles/h']
+  x = collector['Timeout']
+  y = collector['completed_battles/h']
   fig, ax1 = plt.subplots()
   ax1.plot(x, y, 'g-')
   ax1.set_ylabel('battles/h', color='g')
   ax1.set_xlabel('Timout %')
   plt.show()
 
+  # wrap in a dictionary
+  compendium = dict(zip(keys, values))
+  #print data
+  for keys, values in compendium.items():
+    print(values, keys)
 
   return compendium
 
