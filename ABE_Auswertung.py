@@ -225,6 +225,7 @@ def duration_report(duration_data, timeout=600):
   ax.set_title("Grouped battle duration")
   plt.show()
 
+  #decision helper for adjusting the timeout value ENHANCE add plot
   def hyp_avg_duration(values, timeout):
     result = []
     for i in values:
