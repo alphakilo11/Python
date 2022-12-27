@@ -160,7 +160,16 @@ def create_result_DataFrame(data, starting_vehicles=10, version='1.01'):
   return result
 
 def battle_duration(data):
+  """
+  Returns a list of the duration of each battle in seconds
 
+  Example:
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    out = pd.cut(battle_duration(break_apart()), bins=6, include_lowest=True)
+    ax = out.value_counts().plot.bar(rot=0, figsize=(16, 9))
+    plt.show()
+  """
   from datetime import datetime
 
   vanilla_length = len(RESULT_FORMAT['vanilla'])
@@ -170,7 +179,7 @@ def battle_duration(data):
       battle_start_time = datetime(*line['AK_var_fnc_battlelogger_startTime'])
       battle_end_time = datetime(*line['systemTime'])
       battle_duration = battle_end_time - battle_start_time
-      durations.append(battle_duration.total_seconds())
+      durations.append(round(battle_duration.total_seconds()))
     else:
       ... # ENHANCE extract battle duration from timestamps
   return durations
