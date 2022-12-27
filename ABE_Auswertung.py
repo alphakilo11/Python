@@ -227,6 +227,7 @@ def duration_report(duration_data, timeout=600):
 
   #decision helper for adjusting the timeout value ENHANCE add plot
   def hyp_avg_duration(values, timeout):
+    # returns the hypothetical average battle duration for a given timeout value
     result = []
     for i in values:
       if i > timeout:
