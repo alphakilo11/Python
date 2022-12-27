@@ -192,6 +192,8 @@ def duration_report(duration_data, timeout=600):
     duration_report(battle_duration(break_apart()))
   """
   import numpy as np
+  import matplotlib.pyplot as plt
+  import pandas as pd
 
   timeout += 10 # as of V1.01 the logger checks every 10 seconds therefore the actual timeout-time will be 10 seconds after the set value # HEADSUP if timeout is logged I have to change this
   keys = []
@@ -217,6 +219,12 @@ def duration_report(duration_data, timeout=600):
   for keys, values in compendium.items():
     print(values, keys)
   
+  
+  out = pd.cut(battle_duration(break_apart()), bins=20)
+  ax = out.value_counts().plot.bar(rot=0, figsize=(30, 9))
+  ax.set_title("Grouped battle duration")
+  plt.show()
+
   return compendium
 
 
