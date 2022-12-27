@@ -219,11 +219,25 @@ def duration_report(duration_data, timeout=600):
   for keys, values in compendium.items():
     print(values, keys)
   
-  
+
   out = pd.cut(battle_duration(break_apart()), bins=20)
   ax = out.value_counts().plot.bar(rot=0, figsize=(30, 9))
   ax.set_title("Grouped battle duration")
   plt.show()
+
+  def hyp_avg_duration(values, timeout):
+    result = []
+    for i in values:
+      if i > timeout:
+        result.append(timeout)
+      else:
+        result.append(i)
+    return np.mean(result)
+
+  collector = []
+  for percentile in range(70, 80, 1):
+    collector.append([abs(100 - percentile), np.percentile(duration_data, percentile), hyp_avg_duration(duration_data, np.percentile(duration_data, percentile))])
+  print(pd.DataFrame(collector, columns=['%', 'Timeout','avg length']))
 
   return compendium
 
