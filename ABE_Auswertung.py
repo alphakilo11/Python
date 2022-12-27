@@ -154,17 +154,26 @@ def create_result_DataFrame(data, starting_vehicles=10, version='1.01'):
   result['torverhaeltnis'] = result.apply(lambda row: row.kills - row.losses, axis=1)
   result['kill-death-ratio'] = result.apply(lambda row: (row.kills / row.losses) if (row.losses > 0) else (row.kills / 0.4), axis=1) # I assigned some value 0 < x < 1 to types with 0 losses
 
-  # generate stats
-
   # general info
   print(f"Number of battles: {len(data)}.")
-  testline = data[-1]
-  battle_start_time = datetime.datetime(*testline['AK_var_fnc_battlelogger_startTime'])
-  battle_end_time = datetime.datetime(*testline['systemTime'])
-  battle_duration = battle_end_time - battle_start_time
-  print(f"Starttime: {battle_start_time}, Endtime {battle_end_time}, Duration: {battle_duration.total_seconds()} s of last battle")
+
   return result
 
+def battle_duration(data):
+
+  from datetime import datetime
+
+  vanilla_length = len(RESULT_FORMAT['vanilla'])
+  durations = []
+  for line in data:
+    if len(line) > vanilla_length: # apply to post-vanilla datasets only
+      battle_start_time = datetime(*line['AK_var_fnc_battlelogger_startTime'])
+      battle_end_time = datetime(*line['systemTime'])
+      battle_duration = battle_end_time - battle_start_time
+      durations.append(battle_duration.total_seconds())
+    else:
+      ... # ENHANCE extract battle duration from timestamps
+  return durations
 
 def create_matrix(data):
   """
