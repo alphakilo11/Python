@@ -2,6 +2,7 @@ from google.colab import drive
 drive.mount('/content/drive')
 
 # constants
+BATTLE_PARAMETERS = {'ABE_delay': 60, 'loggerInterval': 10, 'timeout': 600}
 BATTLE_RESULTS = {'WON': 'battle_win', 'LOST': 'battle_lost', 'DRAW': 'battle_draw'}
 RESULT_FORMAT = { # the information sequence for the battlelogger result line for each version
   'vanilla': ['AK_var_fnc_battlelogger_typeEAST', 'east_veh_survivors', 'AK_var_fnc_battlelogger_typeINDEP', 'indep_veh_survivors'],
@@ -113,7 +114,7 @@ def break_apart(folderpath='/content/drive/MyDrive/ArmA 3/Homebrew/Automated Bat
   return compendium
 
 
-def create_result_DataFrame(data, starting_vehicles=10, version='1.01'):
+def create_result_DataFrame(data, version='1.01'):
   """
   Create a Pandas DataFrame with following entries: ['battle_win', 'battle_lost', 'battle_draw', 'kills', 'losses', 'score', 'number_of_battles', 'torverhaeltnis', 'kill-death-ratio']
   Requires input as dictionaries obeying RESULT_FORMAT
@@ -140,8 +141,14 @@ def create_result_DataFrame(data, starting_vehicles=10, version='1.01'):
     else:
       result[line['AK_var_fnc_battlelogger_typeEAST']][BATTLE_RESULTS['DRAW']] += 1
       result[line['AK_var_fnc_battlelogger_typeINDEP']][BATTLE_RESULTS['DRAW']] += 1
-    #set kills and lossess
-    result[line['AK_var_fnc_battlelogger_typeEAST']]['kills'] += (starting_vehicles - line['indep_veh_survivors'])
+
+    #set kills and losses
+    if len(line) == len((RESULT_FORMAT['vanilla'])):
+      starting_vehicles = 10
+    else:
+      starting_vehicles = line['AK_var_fnc_battlelogger_numberOfStartingVehicles']
+    
+    result[line['AK_var_fnc_battlelogger_typeEAST']]['kills'] += (starting_vehicles  - line['indep_veh_survivors'])
     result[line['AK_var_fnc_battlelogger_typeEAST']]['losses'] += (starting_vehicles - line['east_veh_survivors'])
     result[line['AK_var_fnc_battlelogger_typeINDEP']]['kills'] += (starting_vehicles - line['east_veh_survivors'])
     result[line['AK_var_fnc_battlelogger_typeINDEP']]['losses'] += (starting_vehicles - line['indep_veh_survivors'])
@@ -184,7 +191,7 @@ def battle_duration(data):
       ... # ENHANCE extract battle duration from timestamps
   return durations
 
-def duration_report(duration_data, timeout=600):
+def duration_report(duration_data, timeout=BATTLE_PARAMETERS['timeout']):
   """
   Returns battle duration statistics and shows a report.
   
@@ -195,7 +202,7 @@ def duration_report(duration_data, timeout=600):
   import matplotlib.pyplot as plt
   import pandas as pd
 
-  timeout += 10 # as of V1.01 the logger checks every 10 seconds therefore the actual timeout-time will be 10 seconds after the set value # HEADSUP if timeout is logged I have to change this
+  timeout += BATTLE_PARAMETERS['loggerInterval'] # HEADSUP if timeout is logged I have to change this
   keys = []
   values = []
 
@@ -234,19 +241,19 @@ def duration_report(duration_data, timeout=600):
         result.append(timeout)
       else:
         result.append(i)
-    return np.mean(result)
+    return np.mean(result) + 30 # add 30 s for avg. ABE delay
 
   collector = []
-  for percentile in range(70, 80, 1): # remove magic numbers
-    collector.append([abs(100 - percentile), np.percentile(duration_data, percentile), hyp_avg_duration(duration_data, np.percentile(duration_data, percentile))])
-  collector = pd.DataFrame(collector, columns=['%', 'Timeout','avg length'])
+  for percentile in range(50, 83, 1): # remove magic numbers
+    collector.append([abs(100 - percentile), np.percentile(duration_data, percentile), hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)), 3600 / hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)), 3600 / hyp_avg_duration(duration_data, np.percentile(duration_data, percentile)) * (percentile/100)])
+  collector = pd.DataFrame(collector, columns=['%', 'Timeout','avg duration', 'battles/h', 'completed_battles/h'])
   print(collector)
 
   x = collector['%']
-  y = collector['avg length']
+  y = collector['battles/h']
   fig, ax1 = plt.subplots()
   ax1.plot(x, y, 'g-')
-  ax1.set_ylabel('avg duration', color='g')
+  ax1.set_ylabel('battles/h', color='g')
   ax1.set_xlabel('Timout %')
   plt.show()
 
