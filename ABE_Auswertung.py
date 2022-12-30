@@ -292,5 +292,6 @@ def create_matrix(data):
 #Execution
 file_operation("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
 duration_report(battle_duration(break_apart()))
-print(types_to_eliminate(create_result_DataFrame(break_apart())))
-create_result_DataFrame(break_apart()).sort_values('score')
+results = create_result_DataFrame(break_apart()).sort_values('score')
+print('These vehicles have proven unworthy to participate in further battles:', types_to_eliminate(results))
+results
