@@ -273,7 +273,7 @@ def types_to_eliminate(data, battle_threshold=5, kill_threshold=0):
   types_to_eliminate = []
   for type in filtered_df.index:
     types_to_eliminate.append(type)
-  return tuple(types_to_eliminate)
+  return types_to_eliminate
 
 
 def create_matrix(data):
