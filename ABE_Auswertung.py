@@ -267,9 +267,9 @@ def duration_report(duration_data, timeout=BATTLE_PARAMETERS['timeout']):
   return compendium
 
 
-def types_to_eliminate(data, battle_threshold=5, kill_threshold=0):
+def types_to_eliminate(data, battle_threshold=5, kdr_threshold=0.1):
   """ Returns a tuple of types which should be eliminated from future battles due to inefficiency"""
-  filtered_df = data.loc[(data['number_of_battles'] >= battle_threshold) & (data['kills'] <= kill_threshold)]
+  filtered_df = data.loc[(data['number_of_battles'] >= battle_threshold) & (data['kill-death-ratio'] <= kdr_threshold)]
   types_to_eliminate = []
   for type in filtered_df.index:
     types_to_eliminate.append(type)
