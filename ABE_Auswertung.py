@@ -293,3 +293,4 @@ def create_matrix(data):
 file_operation("/content/drive/MyDrive/ArmA 3/Homebrew/Automated Battle Engine/Results_1")
 create_result_DataFrame(break_apart()).sort_values('score')
 duration_report(battle_duration(break_apart()))
+types_to_eliminate(create_result_DataFrame(break_apart()).sort_values('score'))
