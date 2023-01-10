@@ -1,9 +1,9 @@
 def loss_analysis(filepath, variant=True):
   """
-  Executes an analysis of data from 
+  Executes an analysis on data from https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-equipment.html
   """
   import re
-  searchexpression = r'T-\d\d'
+  searchexpression = r'T-\d\d' # Search for T-xx tanks
   with open(filepath) as file:
     data = file.read()
   data = data.split('\n')
