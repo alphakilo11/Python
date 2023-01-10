@@ -7,13 +7,18 @@ def loss_analysis(filepath, variant=True):
 
   with open(filepath) as file:
     data = file.read()
-  data = data.split('\n')
 
   #find vehicle category
-  for line in data:
-    temp = re.match(r'[A-z][ A-z]* \(', line)
-    if temp != None:
-      print(temp.string)
+  categories = []
+  temp = re.findall(r'([A-z][ A-z]*)( \()', data)
+  if temp != None:
+    print(len(temp))
+    #for i in range(1, len(temp), 2):
+    #  print(temp[i])
+    #categories.append(temp.group('category'))
+  #print(categories)
+
+  data = data.split('\n')
   if variant == True:
     result = []    
     for line in data:
