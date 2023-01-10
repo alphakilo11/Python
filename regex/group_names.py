@@ -34,3 +34,7 @@ def loss_analysis(filepath, variant=True):
         counter = result.get(temp.group('model'), 0)
         result[temp.group('model')] = counter + int(temp.group('number'))
     return result
+
+spam = loss_analysis('/content/test.txt', False)
+print(spam)
+print(sum(spam.values()) + 180)
