@@ -1,14 +1,15 @@
-def read_FFT3_data(filepath):
+def read_FFT3_data(filepath, sheet_name=0):
   import pandas as pd
-  df = pd.read_excel(filepath)
+  df = pd.read_excel(filepath,sheet_name=sheet_name)
   return df
 
 import random # should be imported at top level to speed up dice throws
+import pandas as pd
 
 def dice_throw():
   return random.randint(1,6)
 
-def anti_vehicle_fire(range=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
+def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
   """
     • Roll to hit—1d6 per ROF of the weapon. To hit requires a 3+ at close
   range, 4+ at effective range and 5+ at long range. Missiles’ to-hit numbers
@@ -30,7 +31,26 @@ def anti_vehicle_fire(range=4, quality=0, rof=3, heat=False, terrain_saving_thro
   per phase.
   Natural 1 always misses, 6 always hits
   """
-  
-  
-unit_data = pd.concat([read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-1950+-v03.xlsx'), read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx')], axis=0)
+  rolls = []
+  for i in range(rof):
+    rolls.append(dice_throw())
+  threshold = distance + quality
+  hits = 0
+  for die in rolls:
+    if die == 6 or die >= threshold:
+      hits += 1
+      continue
+    else:
+      continue
+  return hits
 
+    
+#load unit data
+pre50_vehicles = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=2)
+pre50_artillery = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=3)
+#pre50_infantry
+#vehicles  
+#artillery
+#infantry
+unit_data = pd.concat([pre50_vehicles, pre50_artillery], axis=0)
+anti_vehicle_fire()
