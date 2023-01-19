@@ -12,17 +12,15 @@ def dice_throw():
   return random.randint(1,6)
 
 to_hit_values = {'range': {'close': 3, 'effective': 4, 'long': 5}, 'missiles': {'1st_unlimited': 5, '1st_limited': 6, '2nd_unlimited': 3, '2nd_limited': 4, '3rd_unlimited': 2, '3rd_limited': 3}}
+quality_modifiers = {'poor':}
+
 def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
   """
-    • Roll to hit—1d6 per ROF of the weapon. To hit requires a 3+ at close
-  range, 4+ at effective range and 5+ at long range. Missiles’ to-hit numbers
-  are:
-  ◦◦ 1st generation missiles with unlimited ammo: 5+; with limited
-  ammo: 6.+
-  ◦◦ 2nd generation missiles with unlimited ammo: 3+; with limited
-  ammo: 4+.
-  ◦◦ 3rd generation missiles with unlimited ammo: 2+; with limited
-  ammo: 3+.
+  Phase 1
+    Implement rules iot calculate battles between armored vehicles without any modifiers, missiles or heat ammo
+
+  Phase 2
+
   • Add quality modifiers and other applicable modifiers to all to-hit rolls.
   • An armor value modifier is used when attacked by h-class weapons.
   • If the target is in some kinds of terrain, or behind some types of obstacles,
@@ -48,7 +46,11 @@ def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_t
   return hits
 
 def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx'):   
-  """ Load unit data and concatenate it to a single Pandas Dataframe"""
+  """ 
+  Load unit data and concatenate it to a single Pandas Dataframe
+
+  Use spam[spam["Name"] == "R35"].squeeze()["Period"] to fetch specific values 
+  """
 
   from google.colab import drive
   drive.mount('/content/drive')
@@ -60,4 +62,6 @@ def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Zü
   #artillery
   #infantry
   unit_data = pd.concat([pre50_vehicles, pre50_artillery], axis=0)
+  return unit_data
 anti_vehicle_fire()
+pre50_vehicles
