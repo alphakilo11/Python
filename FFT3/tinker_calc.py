@@ -1,5 +1,7 @@
 def read_FFT3_data(filepath, sheet_name=0):
-  import pandas as pd
+  """
+  Requires pandas as pd
+  """
   df = pd.read_excel(filepath,sheet_name=sheet_name)
   return df
 
@@ -44,13 +46,17 @@ def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_t
       continue
   return hits
 
-    
-#load unit data
-pre50_vehicles = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=2)
-pre50_artillery = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=3)
-#pre50_infantry
-#vehicles  
-#artillery
-#infantry
-unit_data = pd.concat([pre50_vehicles, pre50_artillery], axis=0)
+def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx'):   
+  """ Load unit data and concatenate it to a single Pandas Dataframe"""
+
+  from google.colab import drive
+  drive.mount('/content/drive')
+
+  pre50_vehicles = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=2)
+  pre50_artillery = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=3)
+  #pre50_infantry
+  #vehicles  
+  #artillery
+  #infantry
+  unit_data = pd.concat([pre50_vehicles, pre50_artillery], axis=0)
 anti_vehicle_fire()
