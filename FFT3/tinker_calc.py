@@ -11,7 +11,7 @@ import pandas as pd
 def dice_throw():
   return random.randint(1,6)
 
-to_hit_values = {'range': {'close': 3, 'effective': 4, 'long': 5}, 'missiles': {'1st_unlimited': 5, '1st_limited'}}
+to_hit_values = {'range': {'close': 3, 'effective': 4, 'long': 5}, 'missiles': {'1st_unlimited': 5, '1st_limited': 6, '2nd_unlimited': 3, '2nd_limited': 4, '3rd_unlimited': 2, '3rd_limited': 3}}
 def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
   """
     • Roll to hit—1d6 per ROF of the weapon. To hit requires a 3+ at close
