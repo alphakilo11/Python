@@ -69,7 +69,8 @@ def attack(attacker='Pz. IVD', defender='T-34/76A m.1940', unit_database, debug=
   attacker_values = unit_database[unit_database["Name"] == attacker].squeeze()
   # check if multiple entries are returned
   if type(attacker_values)['Period'] != type(''):
-    print('Name is not unique, using data of first entry')
-    attacker_values = attacker_values[0]
-  result = anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
+    print('ERROR: attacker is not unique, aborting.')
+    return
+
+  result = anti_vehicle_fire(distance=4, quality=0, rof=int(attacker_values['Gun ROF']), heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=int(attacker_values['Gun Pen']), armor=(5, 'A', 3)):
 anti_vehicle_fire()
