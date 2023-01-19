@@ -64,5 +64,9 @@ def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Zü
   #infantry
   unit_data = pd.concat([pre50_vehicles, pre50_artillery], axis=0)
   return unit_data
+
+def attack(attacker='Pz. IVD', defender='T-34/76A m.1940', unit_database):
+  attacker_values = unit_database[unit_database["Name"] == attacker].squeeze()
+  if type(attacker_values) != type(''):
+    print('Name is not unique, using data of first entry')
 anti_vehicle_fire()
-pre50_vehicles
