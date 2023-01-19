@@ -50,6 +50,7 @@ def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Zü
   Load unit data and concatenate it to a single Pandas Dataframe
 
   Use spam[spam["Name"] == "R35"].squeeze()["Period"] to fetch specific values 
+  type(spam[spam["Name"] == "R35"].squeeze()["Period"]) == type('') will check if it returned a single value (mulitple hits are possible, as Name is non-unique
   """
 
   from google.colab import drive
