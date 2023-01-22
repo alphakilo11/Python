@@ -12,7 +12,7 @@ def dice_throw():
   return random.randint(1,6)
 
 to_hit_values = {'range': {'close': 3, 'effective': 4, 'long': 5}, 'missiles': {'1st_unlimited': 5, '1st_limited': 6, '2nd_unlimited': 3, '2nd_limited': 4, '3rd_unlimited': 2, '3rd_limited': 3}}
-quality_modifiers = {'poor':}
+#quality_modifiers = {'poor':}
 
 def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
   """
@@ -45,7 +45,7 @@ def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_t
       continue
   return hits
 
-def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx'):   
+def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx'):   
   """ 
   Load unit data and concatenate it to a single Pandas Dataframe
 
@@ -56,8 +56,8 @@ def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Zü
   from google.colab import drive
   drive.mount('/content/drive')
 
-  pre50_vehicles = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=2)
-  pre50_artillery = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=3)
+  pre50_vehicles = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=2)
+  pre50_artillery = read_FFT3_data('/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx', sheet_name=3)
   #pre50_infantry
   #vehicles  
   #artillery
@@ -65,12 +65,18 @@ def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Zü
   unit_data = pd.concat([pre50_vehicles, pre50_artillery], axis=0)
   return unit_data
 
-def attack(attacker='Pz. IVD', defender='T-34/76A m.1940', unit_database, debug=False):
+def attack(unit_database, attacker='Pz. IVD', defender='T-34/76A m.1940', debug=False):
   attacker_values = unit_database[unit_database["Name"] == attacker].squeeze()
+  defender_values = unit_database[unit_database['Name'] == defender].squeeze()
   # check if multiple entries are returned
-  if type(attacker_values)['Period'] != type(''):
+  if type(attacker_values['Period']) != type(''):
     print('ERROR: attacker is not unique, aborting.')
     return
 # !!! CONTINUE here!!!!
-  result = anti_vehicle_fire(distance=4, quality=0, rof=int(attacker_values['Gun ROF']), heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=int(attacker_values['Gun Pen']), armor=(5, 'A', 3)):
-anti_vehicle_fire()
+
+  result = anti_vehicle_fire(distance=4, quality=0, rof=int(attacker_values['Gun ROF']), heat=False, terrain_saving_throw=0, \
+  terrain_saving_throw_modifiers=0, penetration=int(attacker_values['Gun Pen']), armor=defender_values['Armor'])
+  return result
+
+unit_data = load_unit_data()
+attack(unit_data)
