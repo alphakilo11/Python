@@ -17,7 +17,7 @@ to_hit_values = {'range': {'close': 3, 'effective': 4, 'long': 5}, 'missiles': {
 def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
   """
   Phase 1
-    Implement rules iot calculate battles between armored vehicles without any modifiers, missiles or heat ammo
+    Implement rules iot calculate battles between armored vehicles without any modifiers, missiles or heat or he ammo
   Phase 2
   • Add quality modifiers and other applicable modifiers to all to-hit rolls.
   • An armor value modifier is used when attacked by h-class weapons.
