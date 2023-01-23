@@ -86,7 +86,7 @@ def attack(unit_database, attacker='Pz. IVD', defender='T-34/76A m.1940', debug=
   if type(attacker_values['Period']) != type(''):
     print('ERROR: attacker is not unique, aborting.')
     return
-# !!! CONTINUE here!!!!
+
 
   result = anti_vehicle_fire(distance=4, quality=0, rof=int(attacker_values['Gun ROF']), heat=False, terrain_saving_throw=0, \
   terrain_saving_throw_modifiers=0, penetration=int(attacker_values['Gun Pen']), armor=defender_values['Armor'].split(' '))
