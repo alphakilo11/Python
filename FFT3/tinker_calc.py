@@ -8,54 +8,12 @@ def read_FFT3_data(filepath, sheet_name=0):
 import random # should be imported at top level to speed up dice throws
 import pandas as pd
 
-def dice_throw():
-  return random.randint(1,6)
 
 to_hit_values = {'range': {'close': 3, 'effective': 4, 'long': 5}, 'missiles': {'1st_unlimited': 5, '1st_limited': 6, '2nd_unlimited': 3, '2nd_limited': 4, '3rd_unlimited': 2, '3rd_limited': 3}}
 #quality_modifiers = {'poor':}
 
-def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
-  """
-  Phase 1
-    Implement rules iot calculate battles between armored vehicles without any modifiers, missiles or heat or he ammo
-  Phase 2
-  • Add quality modifiers and other applicable modifiers to all to-hit rolls.
-  • An armor value modifier is used when attacked by h-class weapons.
-  • If the target is in some kinds of terrain, or behind some types of obstacles,
-  it may get a saving throw on 1d6 for each hit you score.
-  • For each hit that isn’t saved, roll the number of dice equal to the weapon’s
-  Pen minus the target’s Armor.
-  • If any die is a “6”, the target is destroyed. If any die is a 4 or 5, the target
-  must make a quality check. One anti-vehicle fire quality check maximum
-  per phase.
-  Natural 1 always misses, 6 always hits
-  """
-  rolls = []
-  for i in range(rof):
-    rolls.append(dice_throw())
-  threshold = distance + quality
-  hits = 0
-  for die in rolls:
-    if die == 6 or die >= threshold:
-      hits += 1
-      continue
-    else:
-      continue
-  #print(hits, 'hits.')
-  # terrain saving throws
-  # ...
-
-  # penetration rolls
-  # ENHANCE optimize this part for performance
-  if hits > 0:
-    penetration_rolls = []
-    penetration_difference = penetration - int(armor[0])
-    for hit in range(hits * penetration_difference):
-      penetration_rolls.append(dice_throw())
-
-    return penetration_rolls
-  
-  return hits # returns 0 if no hits were scored
+def dice_throw():
+  return random.randint(1,6)
 
 def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx'):   
   """ 
@@ -75,6 +33,51 @@ def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Züg
   #infantry
   unit_data = pd.concat([pre50_vehicles, pre50_artillery], axis=0)
   return unit_data
+
+def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_throw=0, terrain_saving_throw_modifiers=0, penetration=7, armor=(5, 'A', 3)):
+  """
+  Phase 1
+    Implement rules iot calculate battles between armored vehicles without any modifiers, missiles or heat or he ammo
+  Phase 2
+  • Add quality modifiers and other applicable modifiers to all to-hit rolls.
+  • An armor value modifier is used when attacked by h-class weapons.
+  • If the target is in some kinds of terrain, or behind some types of obstacles,
+  it may get a saving throw on 1d6 for each hit you score.
+  • If any die is a “6”, the target is destroyed. If any die is a 4 or 5, the target
+  must make a quality check. One anti-vehicle fire quality check maximum
+  per phase.
+  """
+  # "Natural 1 always misses, 6 always hits"
+  rolls = []
+  for i in range(rof):
+    rolls.append(dice_throw())
+  threshold = distance + quality
+  hits = 0
+  for die in rolls:
+    if die == 6 or die >= threshold:
+      hits += 1
+      continue
+    else:
+      continue
+
+  # terrain saving throws
+  # ...
+
+  # penetration rolls   "For each hit that isn’t saved, roll the number of dice equal to the weapon’s Pen minus the target’s Armor."
+  # ENHANCE optimize this part for performance
+  if hits > 0:
+    penetration_difference = penetration - int(armor[0])
+    for hit in range(hits * penetration_difference):
+      throw = dice_throw()
+      if throw == 6:
+        return 'destroyed'
+      if throw >= 4:
+        return 'QC'
+
+    return 'no effect'
+  
+  return hits # returns 0 if no hits were scored
+
 
 def attack(unit_database, attacker='Pz. IVD', defender='T-34/76A m.1940', debug=False):
   attacker_values = unit_database[unit_database["Name"] == attacker].squeeze()
