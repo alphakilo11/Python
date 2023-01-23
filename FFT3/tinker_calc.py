@@ -18,9 +18,7 @@ def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_t
   """
   Phase 1
     Implement rules iot calculate battles between armored vehicles without any modifiers, missiles or heat ammo
-
   Phase 2
-
   • Add quality modifiers and other applicable modifiers to all to-hit rolls.
   • An armor value modifier is used when attacked by h-class weapons.
   • If the target is in some kinds of terrain, or behind some types of obstacles,
@@ -43,12 +41,25 @@ def anti_vehicle_fire(distance=4, quality=0, rof=3, heat=False, terrain_saving_t
       continue
     else:
       continue
-  return hits
+  #print(hits, 'hits.')
+  # terrain saving throws
+  # ...
+
+  # penetration rolls
+  # ENHANCE optimize this part for performance
+  if hits > 0:
+    penetration_rolls = []
+    penetration_difference = penetration - int(armor[0])
+    for hit in range(hits * penetration_difference):
+      penetration_rolls.append(dice_throw())
+
+    return penetration_rolls
+  
+  return hits # returns 0 if no hits were scored
 
 def load_unit_data(filepath='/content/drive/MyDrive/Brettspiele&Co/Wargames/Züge/FFT3/Unit Data/FFT3-Vehicle+Arty+Inf-Data-Pre-1950-v03.xlsx'):   
   """ 
   Load unit data and concatenate it to a single Pandas Dataframe
-
   Use spam[spam["Name"] == "R35"].squeeze()["Period"] to fetch specific values 
   type(spam[spam["Name"] == "R35"].squeeze()["Period"]) == type('') will check if it returned a single value (mulitple hits are possible, as Name is non-unique
   """
@@ -75,7 +86,7 @@ def attack(unit_database, attacker='Pz. IVD', defender='T-34/76A m.1940', debug=
 # !!! CONTINUE here!!!!
 
   result = anti_vehicle_fire(distance=4, quality=0, rof=int(attacker_values['Gun ROF']), heat=False, terrain_saving_throw=0, \
-  terrain_saving_throw_modifiers=0, penetration=int(attacker_values['Gun Pen']), armor=defender_values['Armor'])
+  terrain_saving_throw_modifiers=0, penetration=int(attacker_values['Gun Pen']), armor=defender_values['Armor'].split(' '))
   return result
 
 unit_data = load_unit_data()
