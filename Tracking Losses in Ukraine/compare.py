@@ -1,28 +1,22 @@
 def compare_losses(data1, data2, label1, label2):
     """
     Function: compare_losses
+
     Description:
-    Create a plot to visualize the loss data compiled by loss_analysis()
-    For Google Colab an upgrade of matplotlib might be necessary (pip install matplotlib --upgrade)
+        Create a plot to visualize the loss data compiled by loss_analysis()
+        For Google Colab an upgrade of matplotlib might be necessary (pip install matplotlib --upgrade)
+
     Parameters:
-        - Logic (Object)
-        - Group Leader(s) (Array)
-    Optional:
-        Logic Parameters (Must be passed associated with Object using "setVariable")
-        - Location Type (String)
-            setVariable ["attackLocType", value]
-        - Attack Position (XYZ, Object, Location, Group, Marker, or Task)
-            setVariable ["attackPosition", value]
-        - Search Radius (Scalar)
-            setVariable ["searchRadius", value]
-        - Allow Override (Bool)
-            setVariable ["allowOverride", value]
+        - data1, data2, label1, label2
+
     Example:
         (begin example)
-        [Logic, [group1 ,group2, ..., groupN]] call CBA_fnc_moduleAttack;
+        compare_losses(loss_analysis('/content/test.txt', False), loss_analysis('/content/20230125_ukraine_losses.txt', False), 'Russia', 'Ukraine')
         (end)
+
     Returns:
         Nil
+        
     Author:
         AK
     """
