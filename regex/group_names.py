@@ -1,6 +1,8 @@
 def loss_analysis(filepath, variant=True):
   """
-  Executes an analysis on data from https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-equipment.html
+  Executes an analysis on data from https://www.oryxspioenkop.com
+  Russian losses: https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-equipment.html
+  Ukrainian losses: https://www.oryxspioenkop.com/2022/02/attack-on-europe-documenting-ukrainian.html
   """
   import re
   searchexpression = r'(T-\d\d)' # Search for T-xx tanks
