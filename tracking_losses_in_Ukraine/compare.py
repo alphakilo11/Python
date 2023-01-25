@@ -11,7 +11,7 @@ def compare_losses(data1, data2, label1, label2):
 
     Example:
         (begin example)
-        compare_losses(loss_analysis('/content/test.txt', False), loss_analysis('/content/20230125_ukraine_losses.txt', False), 'Russia', 'Ukraine')
+        compare_losses(loss_analysis('/content/20230125_russian_losses.txt', False), loss_analysis('/content/20230125_ukraine_losses.txt', False), 'Russia', 'Ukraine')
         (end)
 
     Returns:
