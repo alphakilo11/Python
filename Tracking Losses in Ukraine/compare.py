@@ -46,7 +46,7 @@ def compare_losses(data1, data2, label1, label2):
 
     x_and_y = arrange_data_for_plot(data1, data2)
 
-    labels = x_and_y[2] # ENHANCE this is very sloppy
+    labels = x_and_y[2]
     men_means = x_and_y[0]
     women_means = x_and_y[1]
 
