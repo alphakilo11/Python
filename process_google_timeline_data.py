@@ -1,8 +1,7 @@
 def search_location_timeline(year, cutoff_distance):
     """
-    open timeline data and write the timestamps and destinations of all activities exceeding the cutoff
-    travel distance to a results.csv
-    PREREQUESITE This file inside the Google 'Semantic Location History' folder
+    open timeline data and write the timestamps and destinations of all activities exceeding the cutoff travel distance to a results.csv
+    PREREQUESITE Execute this code inside the Google 'Semantic Location History' folder
     ENHANCE sort by date
     the first level is a single key named "timelineObjects" it's value is a list of all items
     the second level consists of either "activitySegment" or "placeVisit" keys that have new dictionaries as values
