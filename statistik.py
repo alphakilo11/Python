@@ -61,3 +61,16 @@ def boxplot(daten):
     maximum = sortierte_daten[-1]
     return (erstes_quartil, dieser_median, drittes_quartil, minimum, maximum, ausreiszer)
 
+def geometrisches_mittel(reelle_zahlen):
+    """S 109"""
+    summenprodukt = 1
+    for zahl in reelle_zahlen:
+        summenprodukt *= zahl
+    return summenprodukt ** (1/len(reelle_zahlen))
+
+def harmonisches_mittel(reelle_zahlen):
+    """S 112"""
+    summe = 0
+    for wert in reelle_zahlen:
+        summe += (1 / wert)
+    return (len(reelle_zahlen) / summe)
