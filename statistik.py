@@ -12,12 +12,12 @@ def klassenmitte(untergrenze, obergrenze):
 
 # Kapitel 4 Lagemaßzahlen
 def arithmetisches_mittel(zahlen):
-    """Falls ein dict als parameter verwendet wird, geht die Funktion von einer Gewichtung aus. Das Format wird mit {gewicht:wert} angenommen."""
+    """Falls ein dict als parameter verwendet wird, geht die Funktion von einer Gewichtung aus. Das Format wird mit {wert:gewicht} angenommen."""
     sum = 0
     if type(zahlen) == type({}):
         """S 88"""
         gesamtgewicht = 0
-        for gewicht, wert in zahlen.items():
+        for wert, gewicht in zahlen.items():
             sum += gewicht * wert
             gesamtgewicht += gewicht
         return sum / gesamtgewicht
@@ -102,13 +102,28 @@ def durchschnittliche_medianabweichung(reelle_zahlen):
         summe_der_abweichungsbetraege += abs(zahl - dieser_median)
     return summe_der_abweichungsbetraege / len(reelle_zahlen)
 
-def empirische_varianz(reelle_zahlen):
-    """S 127 Version II"""
-    mittel = arithmetisches_mittel(reelle_zahlen)
-    summe_der_quadratischen_abweichung = 0
-    for zahl in reelle_zahlen:
-        summe_der_quadratischen_abweichung += (zahl - arithmetisches_mittel) ** 2
-    return summe_der_quadratischen_abweichung / len(reelle_zahlen)
+def empirische_varianz(daten):
+    """
+    Falls ein dict als parameter verwendet wird, geht die Funktion von einer Häufigkeitsverteilung aus. Das Format wird mit {wert:haeufigkeit} angenommen.
+    """
+    sum = 0
+    if type(daten) == type({}):
+        # S 128
+        gesamtgewicht = 0
+        mittel = arithmetisches_mittel(daten)
+        summe_der_quadratischen_abweichung = 0
+        for wert, haeufigkeit in daten.items():
+            summe_der_quadratischen_abweichung += haeufigkeit * ((wert - mittel) ** 2)
+            gesamtgewicht += haeufigkeit
+        return summe_der_quadratischen_abweichung / (gesamtgewicht - 1)
+
+    else:
+        # S 127 Version II
+        mittel = arithmetisches_mittel(daten)
+        summe_der_quadratischen_abweichung = 0
+        for zahl in daten:
+            summe_der_quadratischen_abweichung += (zahl - mittel) ** 2
+        return summe_der_quadratischen_abweichung / len(daten)
 
 def empirische_standardabweichung(reelle_zahlen):
     """S 127 Version II"""
