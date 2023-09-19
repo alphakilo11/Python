@@ -74,3 +74,9 @@ def harmonisches_mittel(reelle_zahlen):
     for wert in reelle_zahlen:
         summe += (1 / wert)
     return (len(reelle_zahlen) / summe)
+
+# Kapitel 5
+
+def spannweite(reelle_zahlen):
+    return max(reelle_zahlen) - min(reelle_zahlen)
+
