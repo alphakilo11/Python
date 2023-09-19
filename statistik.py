@@ -125,9 +125,23 @@ def empirische_varianz(daten):
             summe_der_quadratischen_abweichung += (zahl - mittel) ** 2
         return summe_der_quadratischen_abweichung / len(daten)
 
-def empirische_standardabweichung(reelle_zahlen):
+def empirische_varianz_rel_Haeufigkeit(daten):
+    """
+    S 128 Das Format wird mit {wert:haeufigkeit} angenommen.
+    """
+    sum = 0
+    if type(daten) == type({}):
+        # S 128
+        mittel = arithmetisches_mittel(daten)
+        anzahl_der_merkmale = len(daten)
+        summe_der_quadratischen_abweichung = 0
+        for wert, haeufigkeit in daten.items():
+            summe_der_quadratischen_abweichung += haeufigkeit * ((wert - mittel) ** 2)
+        return (anzahl_der_merkmale * summe_der_quadratischen_abweichung) / (anzahl_der_merkmale - 1)
+
+def empirische_standardabweichung(varianz):
     """S 127 Version II"""
-    return empirische_varianz(reelle_zahlen) ** 0.5
+    return varianz** 0.5
 
 
 
