@@ -12,6 +12,7 @@ def klassenmitte(untergrenze, obergrenze):
 
 # Kapitel 4 Lagemaßzahlen
 def arithmetisches_mittel(zahlen):
+    """Falls ein dict als parameter verwendet wird, geht die Funktion von einer Gewichtung aus. Das Format wird mit {gewicht:wert} angenommen."""
     sum = 0
     if type(zahlen) == type({}):
         """S 88"""
@@ -78,5 +79,40 @@ def harmonisches_mittel(reelle_zahlen):
 # Kapitel 5
 
 def spannweite(reelle_zahlen):
+    """S 121"""
     return max(reelle_zahlen) - min(reelle_zahlen)
+
+def quartilsabstand(datenreihe):
+    """S 122"""
+    return p_quantil(datenreihe, 0.75) - p_quantil(datenreihe, 0.25)
+
+def durchschnittliche_mittelwertabweichung(reelle_zahlen):
+    """S 124"""
+    mittelwert = arithmetisches_mittel(reelle_zahlen)
+    summe_der_abweichungsbetraege = 0
+    for zahl in reelle_zahlen:
+        summe_der_abweichungsbetraege += abs(zahl - mittelwert)
+    return summe_der_abweichungsbetraege / len(reelle_zahlen)
+
+def durchschnittliche_medianabweichung(reelle_zahlen):
+    """S 124"""
+    dieser_median = median(reelle_zahlen)
+    summe_der_abweichungsbetraege = 0
+    for zahl in reelle_zahlen:
+        summe_der_abweichungsbetraege += abs(zahl - dieser_median)
+    return summe_der_abweichungsbetraege / len(reelle_zahlen)
+
+def empirische_varianz(reelle_zahlen):
+    """S 127 Version II"""
+    mittel = arithmetisches_mittel(reelle_zahlen)
+    summe_der_quadratischen_abweichung = 0
+    for zahl in reelle_zahlen:
+        summe_der_quadratischen_abweichung += (zahl - arithmetisches_mittel) ** 2
+    return summe_der_quadratischen_abweichung / len(reelle_zahlen)
+
+def empirische_standardabweichung(reelle_zahlen):
+    """S 127 Version II"""
+    return empirische_varianz(reelle_zahlen) ** 0.5
+
+
 
